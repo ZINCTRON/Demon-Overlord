@@ -16,6 +16,7 @@ class BotConfig(object):
         self.izzymojis = dict()
         self.token = None
         self.env = None
+        self.emoji = None
 
         # set all vars to their final value.
 
@@ -34,24 +35,12 @@ class BotConfig(object):
         # set the token
         self.token = os.environ.get(self.mode["tokenvar"])
         self.env = self.raw["env_vars"]
+        self.emoji = self.raw["emoji"]
     
     def post_connect(self, bot:discord.Client):
         # generate izzymoji list
         for key in self.raw["izzymojis"].keys():
             self.izzymojis[key] = bot.get_emoji(self.raw["izzymojis"][key])
-
-    def check_config(self):
-        if not self.raw:
-            return False
-        elif not self.mode:
-            return False
-        elif not self.izzymojis:
-            return False
-        elif not self.token:
-            return False
-
-        else:
-            return True
 
 
 class APIConfig(object):
