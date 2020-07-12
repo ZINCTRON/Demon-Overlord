@@ -14,7 +14,7 @@ The bot uses three environment variables
 
 - DISCORD_TESTBOT_TOKEN
 - DISCORD_MAIN_TOKEN
-- TENOR_KEY
+- TENOR_TOKEN
 
 
 

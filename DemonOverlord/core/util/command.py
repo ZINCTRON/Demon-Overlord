@@ -1,11 +1,18 @@
-import discord
+from DemonOverlord.core.util.responses import (
+    TextResponse,
+    RateLimitResponse,
+    ErrorResponse,
+    BadCommandResponse,
+)
+from importlib import import_module
+from inspect import getmembers
 
-from DemonOverlord.core.modules import hello, quote, help, interactions, izzy, chat, vote
-from DemonOverlord.core.util.responses import TextResponse, RateLimitResponse, ErrorResponse, BadCommandResponse
+import discord
+import pkgutil
+import DemonOverlord.core.modules as cmds
 
 
 class Command(object):
-
     def __init__(self, bot: discord.Client, message: discord.message):
         self.invoked_by = message.author
         self.mentions = message.mentions
@@ -18,10 +25,13 @@ class Command(object):
 
         # create the command
         to_filter = ["", " ", None]
-        temp = list(filter(lambda x: not x in to_filter,
-                           message.content.split(" ")))
+        temp = list(filter(lambda x: not x in to_filter, message.content.split(" ")))
         self.prefix = temp[0]
         self.command = temp[1]
+
+        # Import all the submodules
+        for importer, modname, ispkg in pkgutil.iter_modules(cmds.__path__):
+            import_module("." + modname, "DemonOverlord.core.modules")
 
         # is it a special case??
         # WE DO
@@ -49,22 +59,11 @@ class Command(object):
 
     async def exec(self) -> None:
         if self.bot.commands.ratelimits.exec(self):
+            if self.command in dir(cmds):
+                response = await getattr(cmds, self.command).handler(self)
 
-            if self.command == "hello":
-                response = await hello.handler(self)
-            elif self.command == "quote":
-                response = await quote.handler(self)
-            elif self.command == "help":
-                response = await help.handler(self)
-            elif self.command == "interactions":
-                response = await interactions.handler(self)
-            elif self.command == "izzy":
-                response = await izzy.handler(self)
-            elif self.command == "chat":
-                response = await chat.handler(self)
-
-            # commented for 2.0.0a1 
-            #elif self.command == "vote":
+            # commented for 2.0.0a1
+            # elif self.command == "vote":
             #    response = await vote.handler(self)
 
             else:
