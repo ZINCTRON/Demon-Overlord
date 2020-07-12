@@ -8,7 +8,6 @@ from DemonOverlord.core.util.limit import RateLimiter
 
 
 class BotConfig(object):
-
     def __init__(self, bot: discord.Client, confdir: str, argv: list):
         # set all vars None first, this also gives us a list of all currently available vars
         self.raw = None
@@ -36,15 +35,14 @@ class BotConfig(object):
         self.token = os.environ.get(self.mode["tokenvar"])
         self.env = self.raw["env_vars"]
         self.emoji = self.raw["emoji"]
-    
-    def post_connect(self, bot:discord.Client):
+
+    def post_connect(self, bot: discord.Client):
         # generate izzymoji list
         for key in self.raw["izzymojis"].keys():
             self.izzymojis[key] = bot.get_emoji(self.raw["izzymojis"][key])
 
 
 class APIConfig(object):
-
     def __init__(self, config: BotConfig):
         # var init
         self.tenor = None
@@ -62,7 +60,6 @@ class DatabaseConfig(object):
 
 
 class CommandConfig(object):
-
     def __init__(self, confdir: str):
         self.interactions = None
         self.relations = None
@@ -77,10 +74,10 @@ class CommandConfig(object):
 
         with open(os.path.join(confdir, "special/relations.json")) as f:
             self.relations = json.load(f)
-        
+
         with open(os.path.join(confdir, "cmd_info.json")) as f:
             self.command_info = json.load(f)
-        
+
         with open(os.path.join(confdir, "../data/commands/izzylinks.json")) as f:
             self.izzylinks = json.load(f)
 
@@ -90,12 +87,16 @@ class CommandConfig(object):
         for i in self.command_info.keys():
             for j in self.command_info[i]["commands"]:
                 self.list.append(j)
-        self.list.append({
-            "command":"interactions", 
-            "ratelimit":self.command_info["interactions"]["ratelimit"]
-        })
-        
+        self.list.append(
+            {
+                "command": "interactions",
+                "ratelimit": self.command_info["interactions"]["ratelimit"],
+            }
+        )
+
         self.ratelimits = RateLimiter(self.list)
+
+
 class RelationshipConfig(object):
-    def __init__(self, db_config:DatabaseConfig):
+    def __init__(self, db_config: DatabaseConfig):
         pass

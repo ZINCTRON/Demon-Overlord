@@ -9,44 +9,40 @@ class RateLimiter(object):
         self.lastExec = {}
         for i in cmd_list:
             if i["ratelimit"]["user_dependent"]:
-                exec_template = {
-                    "name": i["command"],
-                    "ulist": []
-                }
+                exec_template = {"name": i["command"], "ulist": []}
             else:
-                exec_template = {
-                    "name": i["command"],
-                    "timestamp": 0
-                }
+                exec_template = {"name": i["command"], "timestamp": 0}
             self.limits[i["command"]] = RateLimit(
-                i["ratelimit"]["limit"], i["ratelimit"]["user_dependent"])
+                i["ratelimit"]["limit"], i["ratelimit"]["user_dependent"]
+            )
             self.lastExec[i["command"]] = exec_template
 
     # use the ratelimiter
 
     def exec(self, command) -> tuple:
-        user_template = {
-            "user": command.invoked_by.id,
-            "timestamp": 0
-        }
+        user_template = {"user": command.invoked_by.id, "timestamp": 0}
 
         # is this command limited? overwrites global limis
-        if self.limits[command.command].limit: 
+        if self.limits[command.command].limit:
 
-            # the limit is per-user           
+            # the limit is per-user
             if self.limits[command.command].user_dependent:
-                last_exec = list(filter(lambda x: x[1]["user"] == command.invoked_by.id, enumerate(
-                self.lastExec[command.command]["ulist"])))
+                last_exec = list(
+                    filter(
+                        lambda x: x[1]["user"] == command.invoked_by.id,
+                        enumerate(self.lastExec[command.command]["ulist"]),
+                    )
+                )
                 if len(last_exec) > 0:
 
                     if self.limits[command.command].test(int(time()), last_exec[0][1]):
-                        self.lastExec[command.command]["ulist"][last_exec[0]
-                                                                [0]]["timestamp"] = int(time())
+                        self.lastExec[command.command]["ulist"][last_exec[0][0]][
+                            "timestamp"
+                        ] = int(time())
                         return True
                     else:
                         return False
 
-                
                 else:
                     # set the user profile, first execution so we can let it pass
                     self.lastExec[command.command]["ulist"].append(user_template)
@@ -75,4 +71,4 @@ class RateLimit(object):
         return True
 
     def __str__(self) -> str:
-        return f'{self.limit} - {self.user_dependent}'
+        return f"{self.limit} - {self.user_dependent}"
