@@ -9,6 +9,7 @@ from inspect import getmembers
 
 import discord
 import pkgutil
+import traceback
 import DemonOverlord.core.modules as cmds
 
 
@@ -58,17 +59,27 @@ class Command(object):
             self.params = temp[2:] if len(temp) > 3 else None
 
     async def exec(self) -> None:
-        if self.bot.commands.ratelimits.exec(self):
-            if self.command in dir(cmds):
-                response = await getattr(cmds, self.command).handler(self)
+        # try catch for generic error
+        try:
+            try:
+                if self.command in dir(cmds):
+                    if self.bot.commands.ratelimits.exec(self):
+                        response = await getattr(cmds, self.command).handler(self)
 
-            # commented for 2.0.0a1
-            # elif self.command == "vote":
-            #    response = await vote.handler(self)
+                    # commented for 2.0.0a1
+                    # elif self.command == "vote":
+                    #    response = await vote.handler(self)
 
-            else:
-                # rate limit error
-                response = RateLimitResponse(self)
+                    else:
+                        # rate limit error
+                        response = RateLimitResponse(self)
+
+                else:
+                    response = BadCommandResponse(self)
+            except:
+                response = ErrorResponse(self, traceback.format_exc())
+
+            # Send the message
             message = await self.channel.send(embed=response)
 
             # remove error messages and messages with timeout
@@ -83,7 +94,7 @@ class Command(object):
                     await dev_channel.send(embed=response)
             await self.message.delete()
         except:
-            pass # we don't have to do anything, we just don't want an error message that we expect anyways
+            pass  # we don't have to do anything, we just don't want an error message that we expect anyways
 
     async def rand_status(self) -> discord.BaseActivity:
         pass
