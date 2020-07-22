@@ -179,17 +179,20 @@
             "emoji": "siip",
             "action": {
                 "alone": "eats.",
-                "social": "with with"
+                "social": "eats with"
             }
-        }
-    },
-    "social": {
+        },
         "scream": {
             "query": "scream",
             "type": "alone",
-            "action": "screams",
+            "action": {
+                "alone": "screams.",
+                "social": "screams at"
+            },
             "emoji": "frustrated"
-        },
+        }
+    },
+    "social": {
         "kick": {
             "query": "kick",
             "type": "social",
