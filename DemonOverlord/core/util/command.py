@@ -83,16 +83,16 @@ class Command(object):
             message = await self.channel.send(embed=response)
 
                 # remove error messages and messages with timeout
-                if isinstance(response, (TextResponse)):
-                    if response.timeout > 0:
-                        await message.delete(delay=response.timeout)
+            if isinstance(response, (TextResponse)):
+                if response.timeout > 0:
+                    await message.delete(delay=response.timeout)
 
-                    if isinstance(response, (ErrorResponse)):
+                if isinstance(response, (ErrorResponse)):
 
-                        # send an error meassage to dev channel
-                        dev_channel = message.guild.get_channel(684100408700043303)
-                        await dev_channel.send(embed=response)
-                await self.message.delete()
+                    # send an error meassage to dev channel
+                    dev_channel = message.guild.get_channel(684100408700043303)
+                    await dev_channel.send(embed=response)
+            await self.message.delete()
         except:
             pass  # we don't have to do anything, we just don't want an error message that we expect anyways
 
