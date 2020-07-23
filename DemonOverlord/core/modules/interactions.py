@@ -170,7 +170,7 @@ class MusicInteraction(CombineInteraction):
             self.insert_field_at(
                 0,
                 name=self.spotify.artist,
-                value=f"**Song:** __{self.spotify.title}__\n**Album:** __{self.spotify.album}__",
+                value=f"__**Song:**__ {self.spotify.title}\n__**Album:**__ {self.spotify.album}",
                 inline=False,
             )
             self.url = f"https://open.spotify.com/track/{self.spotify.track_id}"
