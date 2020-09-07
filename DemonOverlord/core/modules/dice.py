@@ -28,6 +28,7 @@ class DiceResponse(TextResponse):
                 out.append(bot.config.emoji["numbers"][int(i)])
             return "".join(out)
 
+
         title = f"Dice - {command.action.upper()}"
         super().__init__(
             title,
