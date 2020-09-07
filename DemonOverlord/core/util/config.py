@@ -2,6 +2,7 @@ import discord
 import os
 import sys
 import json
+import asyncio
 
 from DemonOverlord.core.util.api import TenorAPI, InspirobotAPI
 from DemonOverlord.core.util.limit import RateLimiter
@@ -16,7 +17,8 @@ class BotConfig(object):
         self.token = None
         self.env = None
         self.emoji = None
-
+        self.vote_lock = asyncio.Lock()
+        self.votes = dict()
         # set all vars to their final value.
 
         # get the raw config.json
@@ -35,6 +37,7 @@ class BotConfig(object):
         self.token = os.environ.get(self.mode["tokenvar"])
         self.env = self.raw["env_vars"]
         self.emoji = self.raw["emoji"]
+        
 
     def post_connect(self, bot: discord.Client):
         # generate izzymoji list

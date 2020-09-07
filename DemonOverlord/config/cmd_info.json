@@ -2,7 +2,7 @@
     "help": {
         "command_syntax": "help {command}",
         "description": "This shows all Comands and how to use them. To get more info, use this command with a command or a category.",
-        "timeout": 60,
+        "timeout": 30,
         "commands": [
             {
                 "command": "help",
