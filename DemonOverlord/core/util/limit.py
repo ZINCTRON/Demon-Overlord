@@ -21,7 +21,7 @@ class RateLimiter(object):
 
     def exec(self, command) -> tuple:
         user_template = {"user": command.invoked_by.id, "timestamp": 0}
-        out = {"isActive": True, "timeRemain": 0}
+        out = {"isActive": False, "timeRemain": 0}
 
         # is this command limited? overwrites global limits
         if self.limits[command.command].limit:
@@ -68,7 +68,8 @@ class RateLimiter(object):
                         int(time()) - self.lastExec[command.command]["timestamp"]
                     )
         else:
-            out["isActive"] = True
+
+            out["isActive"] = False
         return out
 
 
