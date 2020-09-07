@@ -3,6 +3,7 @@ import discord
 from DemonOverlord.core.util.responses import TextResponse, BadCommandResponse
 from DemonOverlord.core.modules.help import gen_help
 
+
 async def handler(command):
 
     # default action if there is none: just get the help info for the command

@@ -3,6 +3,7 @@ import discord
 from DemonOverlord.core.util.responses import TextResponse, BadCommandResponse
 from DemonOverlord.core.modules.help import gen_help
 
+
 async def handler(command) -> discord.Embed:
 
     if not command.params:
@@ -28,4 +29,6 @@ class ChatDescription(TextResponse):
         self.description = f'This is a list of currently available chats in the category `{" ".join(command.params).upper()}`.'
 
         for chat in chat_desc:
-            self.add_field(name=chat["name"].upper(), value=chat["description"], inline=False)
+            self.add_field(
+                name=chat["name"].upper(), value=chat["description"], inline=False
+            )
