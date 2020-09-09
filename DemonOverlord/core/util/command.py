@@ -23,12 +23,16 @@ class Command(object):
         self.full = message.content.replace("\n", " ")
         self.special = None
         self.message = message
+        self.short = False
 
         # create the command
         to_filter = ["", " ", None]
-        temp = list(filter(lambda x: not x in to_filter, message.content.split(" ")))
+        temp = list(filter(lambda x: not x in to_filter,
+                           message.content.split(" ")))
         self.prefix = temp[0]
         self.command = temp[1]
+        if self.command in bot.commands.short:
+            self.short = True
 
         # Import all the submodules
         for importer, modname, ispkg in pkgutil.iter_modules(cmds.__path__):
@@ -50,7 +54,7 @@ class Command(object):
         elif self.command == "chat":
             self.action = None
             self.params = temp[2:] if len(temp) > 2 else None
-        
+
         # Y'AIN'T SPECIAL, YA LIL BITCH
         else:
             self.action = temp[2] if len(temp) > 2 else None
@@ -60,13 +64,15 @@ class Command(object):
         # try catch for generic error
         try:
             try:
-                if self.command in dir(cmds):
+                if (self.command in dir(cmds)) and (not self.short):
                     limit = self.bot.commands.ratelimits.exec(self)
                     if not limit["isActive"]:
                         response = await getattr(cmds, self.command).handler(self)
                     else:
                         # rate limit error
                         response = RateLimitResponse(self, limit["timeRemain"])
+                elif self.short:
+                    return # shorthand commands are handled by their respective module. e.g. minesweeper
 
                 else:
                     response = BadCommandResponse(self)
@@ -76,7 +82,7 @@ class Command(object):
             # Send the message
             message = await self.channel.send(embed=response)
 
-                # remove error messages and messages with timeout
+            # remove error messages and messages with timeout
             if isinstance(response, (TextResponse)):
                 if response.timeout > 0:
                     await message.delete(delay=response.timeout)
