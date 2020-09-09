@@ -32,7 +32,6 @@ class BotConfig(object):
                 self.mode = self.raw["cli_options"]["bot_modes"][argv[1]]
             else:
                 self.raw["cli_options"]["bot_modes"]["--prod"]
-        print(self.mode)
         # set the token
         self.token = os.environ.get(self.mode["tokenvar"])
         self.env = self.raw["env_vars"]
@@ -71,6 +70,7 @@ class CommandConfig(object):
         self.ratelimits = None
         self.izzylinks = None
         self.chats = None
+        self.short = dict()
 
         with open(os.path.join(confdir, "special/interactions.json")) as f:
             self.interactions = json.load(f)
@@ -87,6 +87,8 @@ class CommandConfig(object):
         for i in self.command_info.keys():
             for j in self.command_info[i]["commands"]:
                 self.list.append(j)
+                if j["short"]:
+                    self.short.update({ j["short"] : j["command"] })
         self.list.append(
             {
                 "command": "interactions",

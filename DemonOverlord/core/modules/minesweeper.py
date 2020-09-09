@@ -33,8 +33,6 @@ async def handler(command) -> None:
                                 else:
                                     if x >= 1 and y >= 1 and x <= 10 and y <= 10:
                                         return True
-                        elif make_command[2] == "end":
-                            return True
             return False
 
     if command.action == "start":
