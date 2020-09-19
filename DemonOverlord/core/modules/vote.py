@@ -13,6 +13,7 @@ async def handler(command) -> discord.Embed:
     if command.action == "create":
         vote_str = " ".join(command.params)
         vote = compile(vote_str)
+        print(vote)
 
 
 async def handle_vote(msg_id: int) -> None:
