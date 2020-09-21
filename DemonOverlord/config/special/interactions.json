@@ -5,7 +5,9 @@
             "type": "alone",
             "action": "facepalms.",
             "emoji": "frustrated",
-            "gifs": []
+            "gifs": [
+                "https://media.tenor.co/videos/286e4cd84c62ae7e7635671113199f2a/mp4"
+            ]
         },
         "bored": {
             "query": "bored",

@@ -55,4 +55,6 @@ def run():
 
 
 if __name__ == "__main__":
+    if modules_missing:
+        install_requirements()
     run()
