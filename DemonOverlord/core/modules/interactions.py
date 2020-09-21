@@ -13,10 +13,15 @@ async def handler(command) -> discord.Embed:
 
     # what interaction do we have?
     if command.action in alone_interactions.keys():
-        index = random.randint(
-            0, len(alone_interactions[command.action]["gifs"]))
-        url = alone_interactions[command.action]["gifs"][index] if len(alone_interactions[command.action]["gifs"]) > 0 else await command.bot.api.tenor.get_interact(
-            f'anime {alone_interactions[command.action]["query"]}'
+        gifs = list(alone_interactions[command.action]["gifs"])
+        index = random.randint(0, len(gifs)-1)
+        print(gifs[0], index)
+        url = (
+            gifs[index]
+            if len(gifs) > 0
+            else await command.bot.api.tenor.get_interact(
+                f'anime {alone_interactions[command.action]["query"]}'
+            )
         )
         interact = AloneInteractions(
             command.bot, alone_interactions[command.action], command.invoked_by, url=url
@@ -24,11 +29,15 @@ async def handler(command) -> discord.Embed:
     else:
         # filter mentions from params. double mentions are ignored
         if command.params != None and len(command.mentions) > 0:
-            command.params = command.params[len(command.mentions):]
+            command.params = command.params[len(command.mentions) :]
 
             mentions = [i.display_name for i in command.mentions]
-        elif command.params != None and len(command.mentions) > 0 and command.params[0] == "everyone":
-            command.params = command.params[len(command.mentions)+1:]
+        elif (
+            command.params != None
+            and len(command.mentions) > 0
+            and command.params[0] == "everyone"
+        ):
+            command.params = command.params[len(command.mentions) + 1 :]
             mentions = ["everyone"] + [i.display_name for i in command.mentions]
         elif command.params != None and command.params[0] == "everyone":
             command.params = command.params[1:]  # filter everyone
@@ -42,10 +51,14 @@ async def handler(command) -> discord.Embed:
             if len(mentions) < 1:
                 return BadCommandResponse(command)
 
-            index = random.randint(
-                0, len(social_interactions[command.action]["gifs"]))
-            url = social_interactions[command.action]["gifs"][index] if len(social_interactions[command.action]["gifs"]) > 0 else await command.bot.api.tenor.get_interact(
-                f'anime {social_interactions[command.action]["query"]}'
+            gifs = list(social_interactions[command.action]["gifs"])
+            index = random.randint(0, len(gifs)-1)
+            url = (
+                gifs[index]
+                if len(gifs) > 0
+                else await command.bot.api.tenor.get_interact(
+                    f'anime {social_interactions[command.action]["query"]}'
+                )
             )
             interact = SocialInteraction(
                 command.bot,
@@ -56,10 +69,14 @@ async def handler(command) -> discord.Embed:
             )
 
         elif command.action in combine_interactions.keys():
-            index = random.randint(
-                0, len(combine_interactions[command.action]["gifs"]))
-            url = combine_interactions[command.action]["gifs"][index] if len(combine_interactions[command.action]["gifs"]) > 0 else await command.bot.api.tenor.get_interact(
-                f'anime {combine_interactions[command.action]["query"]}'
+            gifs = list(combine_interactions[command.action]["gifs"])
+            index = random.randint(0, len(gifs)-1)
+            url = (
+                gifs[index]
+                if len(gifs) > 0
+                else await command.bot.api.tenor.get_interact(
+                    f'anime {combine_interactions[command.action]["query"]}'
+                )
             )
 
             if combine_interactions[command.action]["type"] == "music":
@@ -93,7 +110,6 @@ async def handler(command) -> discord.Embed:
         interact.add_message(" ".join(command.params))
 
     return interact
-
 
 
 # base interaction
