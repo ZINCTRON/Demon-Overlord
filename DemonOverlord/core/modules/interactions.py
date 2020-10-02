@@ -20,11 +20,19 @@ async def handler(command) -> discord.Embed:
         )
     else:
         # filter mentions from params. double mentions are ignored
-        if command.params != None and len(command.mentions) > 0 and command.params[0] != "everyone":
+        if (
+            command.params != None
+            and len(command.mentions) > 0
+            and command.params[0] != "everyone"
+        ):
             command.params = command.params[len(command.mentions) :]
             mentions = [i.display_name for i in command.mentions]
-        elif command.params != None and len(command.mentions) > 0 and command.params[0] == "everyone":
-            command.params = command.params[len(command.mentions)+1:]
+        elif (
+            command.params != None
+            and len(command.mentions) > 0
+            and command.params[0] == "everyone"
+        ):
+            command.params = command.params[len(command.mentions) + 1 :]
             mentions = ["everyone"] + [i.display_name for i in command.mentions]
         elif command.params != None and command.params[0] == "everyone":
             command.params = command.params[1:]  # filter everyone
@@ -84,7 +92,6 @@ async def handler(command) -> discord.Embed:
         interact.add_message(" ".join(command.params))
 
     return interact
-
 
 
 # base interaction
@@ -192,7 +199,9 @@ class GameInteraction(CombineInteraction):
 
         game = list(
             filter(
-                lambda x: isinstance(x, (discord.Game, discord.Streaming)) or x,type in (discord.ActivityType.playing, discord.ActivityType.streaming),
+                lambda x: isinstance(x, (discord.Game, discord.Streaming))
+                or x.type
+                in (discord.ActivityType.playing, discord.ActivityType.streaming),
                 user.activities,
             )
         )
@@ -200,8 +209,11 @@ class GameInteraction(CombineInteraction):
         self.game = game[0] if len(game) > 0 else None
 
         if self.game != None:
-            # is playing a
-            if isinstance(self.game, discord.Game) or self.game.type == discord.ActivityType.playing:
+            # is playing a game
+            if (
+                isinstance(self.game, discord.Game)
+                or self.game.type == discord.ActivityType.playing
+            ):
                 self.insert_field_at(
                     0, name="Game:", value=self.game.name, inline=False
                 )
