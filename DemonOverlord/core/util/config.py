@@ -2,6 +2,7 @@ import discord
 import os
 import sys
 import json
+import asyncio
 
 from DemonOverlord.core.util.api import TenorAPI, InspirobotAPI
 from DemonOverlord.core.util.limit import RateLimiter
@@ -16,7 +17,8 @@ class BotConfig(object):
         self.token = None
         self.env = None
         self.emoji = None
-
+        self.vote_lock = asyncio.Lock()
+        self.votes = dict()
         # set all vars to their final value.
 
         # get the raw config.json
@@ -30,11 +32,11 @@ class BotConfig(object):
                 self.mode = self.raw["cli_options"]["bot_modes"][argv[1]]
             else:
                 self.raw["cli_options"]["bot_modes"]["--prod"]
-        print(self.mode)
         # set the token
         self.token = os.environ.get(self.mode["tokenvar"])
         self.env = self.raw["env_vars"]
         self.emoji = self.raw["emoji"]
+        
 
     def post_connect(self, bot: discord.Client):
         # generate izzymoji list
@@ -68,6 +70,7 @@ class CommandConfig(object):
         self.ratelimits = None
         self.izzylinks = None
         self.chats = None
+        self.short = dict()
 
         with open(os.path.join(confdir, "special/interactions.json")) as f:
             self.interactions = json.load(f)
@@ -84,6 +87,8 @@ class CommandConfig(object):
         for i in self.command_info.keys():
             for j in self.command_info[i]["commands"]:
                 self.list.append(j)
+                if j["short"]:
+                    self.short.update({ j["short"] : j["command"] })
         self.list.append(
             {
                 "command": "interactions",

@@ -2,10 +2,10 @@
     "help": {
         "command_syntax": "help {command}",
         "description": "This shows all Comands and how to use them. To get more info, use this command with a command or a category.",
-        "timeout": 60,
-        "commands": [
-            {
+        "timeout": 30,
+        "commands": [{
                 "command": "help",
+                "short": null,
                 "syntax": "help {command}",
                 "description": "Calls this Help page.",
                 "ratelimit": {
@@ -16,6 +16,7 @@
             },
             {
                 "command": "hello",
+                "short": null,
                 "syntax": "hello",
                 "description": "Responds by greeting the user. no extra actions needed.",
                 "ratelimit": {
@@ -26,14 +27,14 @@
             },
             {
                 "command": "izzy",
+                "short": null,
                 "syntax": "izzy {action}",
                 "description": "Shows Information about Izzy's pages, including some hidden stuff.",
                 "ratelimit": {
                     "limit": 15,
                     "user_dependent": true
                 },
-                "actions": [
-                    {
+                "actions": [{
                         "action": "art",
                         "description": "Our overlord's instagram accounts.",
                         "usage": "art",
@@ -72,8 +73,7 @@
                 ]
             }
         ],
-        "categories": [
-            {
+        "categories": [{
                 "command": "interactions",
                 "description": "Commands that allow gif based interactions between server members."
             },
@@ -105,9 +105,9 @@
         "command_syntax": "{command} {action} {args}",
         "timeout": 25,
         "description": "Commands that can be used to get info and tools to make stuff easier",
-        "commands": [
-            {
+        "commands": [{
                 "command": "chat",
+                "short": null,
                 "syntax": "chat {category}",
                 "description": "shows information about the Chats on the Server.",
                 "ratelimit": {
@@ -118,19 +118,18 @@
             },
             {
                 "command": "vote",
+                "short": null,
                 "syntax": "vote {action} {params}",
                 "description": "creates or removes a vote.",
                 "ratelimit": {
                     "limit": 300,
                     "user_dependent": true
                 },
-                "actions": [
-                    {
+                "actions": [{
                         "action": "create",
                         "description": "creates a vote with given parameters.",
                         "usage": "create {name};{options}",
-                        "params": [
-                            {
+                        "params": [{
                                 "name": "name",
                                 "description": "The Name of the vote."
                             },
@@ -144,12 +143,10 @@
                         "action": "end",
                         "description": "ends the vote ",
                         "usage": "vote end {name}",
-                        "params": [
-                            {
-                                "name": "name",
-                                "description": "The Name of the vote."
-                            }
-                        ]
+                        "params": [{
+                            "name": "name",
+                            "description": "The Name of the vote."
+                        }]
                     }
                 ]
             }
@@ -159,46 +156,42 @@
         "command_syntax": "{command} {action} {params}",
         "description": "All the commands for bot and server administration",
         "timeout": 15,
-        "commands": [
-            {
-                "command": "limit",
-                "syntax": "limit {action} {params}",
-                "description": "a command to add or remove a limit from a command or all commands",
-                "ratelimit": {
-                    "limit": 0,
-                    "user_dependent": true
-                },
-                "actions": [
+        "commands": [{
+            "command": "limit",
+            "short": null,
+            "syntax": "limit {action} {params}",
+            "description": "a command to add or remove a limit from a command or all commands",
+            "ratelimit": {
+                "limit": 0,
+                "user_dependent": true
+            },
+            "actions": [{
+                "action": "set",
+                "description": "sets the rate limit of a specified command",
+                "usage": "set {command} {time} <{local}>",
+                "params": [{
+                        "name": "command",
+                        "description": "The Name of the command to limit or 'all'"
+                    },
                     {
-                        "action": "set",
-                        "description": "creates a vote with given parameters.",
-                        "usage": "set {command} {time} <{local}>",
-                        "params": [
-                            {
-                                "name": "command",
-                                "description": "The Name of the command to limit or 'all'"
-                            },
-                            {
-                                "name": "interval",
-                                "description": "A time interval in seconds."
-                            },
-                            {
-                                "name": "local",
-                                "description": "can be `yes/no`. makes limit user depedent"
-                            }
-                        ]
+                        "name": "interval",
+                        "description": "A time interval in seconds."
+                    },
+                    {
+                        "name": "local",
+                        "description": "can be `yes/no`. makes limit user depedent"
                     }
                 ]
-            }
-        ]
+            }]
+        }]
     },
     "fun": {
         "command_syntax": "{command} {action} {params}",
         "description": "All the Fun commands UwU",
         "timeout": 20,
-        "commands": [
-            {
+        "commands": [{
                 "command": "quote",
+                "short": null,
                 "syntax": "quote",
                 "description": "Gets a random, possibly Inspirational, Image Quote from Inspirobot.",
                 "ratelimit": {
@@ -209,6 +202,7 @@
             },
             {
                 "command": "bubble",
+                "short": null,
                 "syntax": "bubble",
                 "description": "creates a 10x10 grid of 'pop' spoilers where one may be replaced with nut or uwu",
                 "ratelimit": {
@@ -218,21 +212,61 @@
                 "actions": null
             },
             {
-                "command": "minesweeper",
-                "syntax": "minesweeper {action}",
-                "description": "start a game of minesweeper",
+                "command": "dice",
+                "short": null,
+                "syntax": "dice {die_type}",
+                "description": "Rolls one a dice.",
                 "ratelimit": {
-                    "limit":3000,
-                    "user_dependent":true
+                    "limit": 20,
+                    "user_dependent": true
                 },
-                "actions": [
+                "actions": [{
+                        "action": "d6",
+                        "description": "rolls a dice with 6 sides",
+                        "usage": "d6",
+                        "params": null
+                    },
                     {
-                        "action": "start",
-                        "description": "starts a game of minesweeper",
-                        "usage": "start",
+                        "action": "d8",
+                        "description": "rolls a dice with 8 sides",
+                        "usage": "d8",
+                        "params": null
+                    },
+                    {
+                        "action": "d10",
+                        "description": "rolls a dice with 10 sides",
+                        "usage": "d10",
+                        "params": null
+                    },
+                    {
+                        "action": "d12",
+                        "description": "rolls a dice with 12 sides",
+                        "usage": "d12",
+                        "params": null
+                    },
+                    {
+                        "action": "d20",
+                        "description": "rolls a dice with 20 sides",
+                        "usage": "d20",
                         "params": null
                     }
                 ]
+            },
+            {
+                "command": "minesweeper",
+                "short": "ms",
+                "syntax": "minesweeper {action}",
+                "description": "start a game of minesweeper",
+                "ratelimit": {
+                    "limit": 3000,
+                    "user_dependent": true
+                },
+                "actions": [{
+                    "action": "start",
+                    "description": "starts a game of minesweeper",
+                    "usage": "start",
+                    "params": null
+                }]
             }
         ]
     }
