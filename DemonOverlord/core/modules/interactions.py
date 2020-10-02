@@ -192,7 +192,7 @@ class GameInteraction(CombineInteraction):
 
         game = list(
             filter(
-                lambda x: isinstance(x, (discord.Game, discord.Streaming)),
+                lambda x: isinstance(x, (discord.Game, discord.Streaming)) or x,type in (discord.ActivityType.playing, discord.ActivityType.streaming),
                 user.activities,
             )
         )
@@ -201,7 +201,7 @@ class GameInteraction(CombineInteraction):
 
         if self.game != None:
             # is playing a
-            if isinstance(self.game, discord.Game):
+            if isinstance(self.game, discord.Game) or self.game.type == discord.ActivityType.playing:
                 self.insert_field_at(
                     0, name="Game:", value=self.game.name, inline=False
                 )
