@@ -200,7 +200,7 @@ class GameInteraction(CombineInteraction):
         self.game = game[0] if len(game) > 0 else None
 
         if self.game != None:
-            # is playing a
+            # is playing a game 
             if isinstance(self.game, discord.Game) or self.game.type == discord.ActivityType.playing:
                 self.insert_field_at(
                     0, name="Game:", value=self.game.name, inline=False
