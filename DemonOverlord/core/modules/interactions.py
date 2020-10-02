@@ -192,7 +192,7 @@ class GameInteraction(CombineInteraction):
 
         game = list(
             filter(
-                lambda x: isinstance(x, (discord.Game, discord.Streaming)) or x,type in (discord.ActivityType.playing, discord.ActivityType.streaming),
+                lambda x: isinstance(x, (discord.Game, discord.Streaming)) or x.type in (discord.ActivityType.playing, discord.ActivityType.streaming),
                 user.activities,
             )
         )
