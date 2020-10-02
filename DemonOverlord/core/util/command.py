@@ -65,7 +65,6 @@ class Command(object):
         try:
             try:
                 if (self.command in dir(cmds)) and (not self.short):
-
                     limit = self.bot.commands.ratelimits.exec(self)
                     if not limit["isActive"]:
                         response = await getattr(cmds, self.command).handler(self)
