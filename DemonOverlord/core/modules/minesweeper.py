@@ -33,7 +33,7 @@ async def handler(command) -> None:
                                 else:
                                     if x >= 1 and y >= 1 and x <= 10 and y <= 10:
                                         return True
-                        elif make_command[2] == "end":
+                        elif make_command[2] == "quit":
                             return True
             return False
 
@@ -43,7 +43,7 @@ async def handler(command) -> None:
         game_grid = generate_game()
         running = True
         reason = "You hit a mine and lost. Better luck next time"
-        description = f'This is minesweeper.\nYou can do the following things:\n__Toggle Flag:__\n  `{command.bot.config.mode["prefix"]} ms flag {{x}} {{y}}`\n\n__Reveal a field:__\n  `{command.bot.config.mode["prefix"]} ms reveal {{x}} {{y}}`'
+        description = f'This is minesweeper.\nYou can do the following things:\n__Toggle Flag:__\n  `{command.bot.config.mode["prefix"]} ms flag {{x}} {{y}}`\n\n__Reveal a field:__\n  `{command.bot.config.mode["prefix"]} ms reveal {{x}} {{y}}`\n\n__End Game:__\n `{command.bot.config.mode["prefix"]} ms quit`'
         response = await command.message.channel.send(
             embed=GameResponse(
                 "Minesweeeper", description, get_grid(command.bot, game_grid)
@@ -66,6 +66,11 @@ async def handler(command) -> None:
                     running = game_grid[int(make_command[4]) - 1][
                         int(make_command[3]) - 1
                     ].uncover()
+                elif make_command[2] == "quit":
+                    reason = "User ended the game."
+                    running = False
+                    del message
+                    break
 
                 # have we won? update win and show status
                 game_won = determine_win(game_grid)
