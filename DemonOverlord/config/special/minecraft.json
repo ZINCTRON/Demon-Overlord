@@ -140,7 +140,7 @@
     },
     "datapacks": {
         "description": "These are all the datapacks currently installed on and used by the server. These are not mods.",
-        "logo" : "https://e7.pngegg.com/pngimages/9/187/png-clipart-brown-and-green-minecraft-cube-minecraft-logo-video-game-minecraft-skeleton-s-angle-grass.png",
+        "logo" : "https://static.wikia.nocookie.net/minecraft_gamepedia/images/9/93/Grass_Block_JE7_BE6.png/revision/latest?cb=20200830143209",
         "list": [{
                 "name": "No Enderman Grief",
                 "inline" : false,
