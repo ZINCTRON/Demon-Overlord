@@ -18,7 +18,6 @@ class ImageResponse(discord.Embed):
         super().__init__(title=f"{icon} {title}".lstrip(" "), color=color)
         self.set_image(url=url)
 
-
 class RateLimitResponse(TextResponse):
     def __init__(self, command, time_remain):
         super().__init__(
