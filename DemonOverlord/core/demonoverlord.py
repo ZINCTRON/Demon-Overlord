@@ -13,6 +13,10 @@ from DemonOverlord.core.util.command import Command
 
 
 class DemonOverlord(discord.Client):
+    """
+    This class is the main bot class.
+    """
+
     def __init__(self, argv: list):
         super().__init__()
         workdir = os.path.dirname(os.path.abspath(__file__))
@@ -30,13 +34,15 @@ class DemonOverlord(discord.Client):
         print("====== LOADING EXTRA MODULES ======")
         try:
             self.config.post_connect(self)
-        except Exception as e:
-            print("[WARN] : Izzymojis not loaded")
+        except:
+            print("[WARN] : Post connection setup Done")
         else:
-            print("[MSG]: Loaded Izzymojis")
+            print("[MSG]: Post connection setup failed")
         print("====== STARTUP DONE ======")
 
     async def on_message(self, message: discord.Message) -> None:
+
+        # handle all commands
         if message.author != self.user and message.content.startswith(
             self.config.mode["prefix"]
         ):
