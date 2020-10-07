@@ -204,7 +204,7 @@
             {
                 "name": "Limited Spectator Mode",
                 "inline" : true,
-                "description": "This allows any player to use spectator mode. You cannot get more than 60 blocks away from the point you started it and you'll be teleported back to that position when you deactiivate it"
+                "description": "This allows any player to use spectator mode. You cannot get more than 60 blocks away from the point you started it and you'll be teleported back to that position when you deactiivate it\nTo use:\nActivate: `/trigger sp_on`\nDeactivate:`/trigger sp_off` "
             },
             {
                 "name": "Universal Dyeing",
