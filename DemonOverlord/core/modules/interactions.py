@@ -15,7 +15,7 @@ async def handler(command) -> discord.Embed:
     if command.action in alone_interactions.keys():
 
         gifs = list(alone_interactions[command.action]["gifs"])
-        index = random.randint(0, len(gifs)-1)
+        index = random.randint(0, len(gifs)-1 if len(gifs)>0 else 0)
         print(gifs[0], index)
         url = (
             gifs[index]
@@ -74,7 +74,7 @@ async def handler(command) -> discord.Embed:
                 return BadCommandResponse(command)
 
             gifs = list(social_interactions[command.action]["gifs"])
-            index = random.randint(0, len(gifs)-1)
+            index = random.randint(0, len(gifs)-1 if len(gifs)>0 else 0)
             url = (
                 gifs[index]
                 if len(gifs) > 0
@@ -93,7 +93,7 @@ async def handler(command) -> discord.Embed:
         # these are combine interactions, interactions that are capable of alone AND social interaction behavior
         elif command.action in combine_interactions.keys():
             gifs = list(combine_interactions[command.action]["gifs"])
-            index = random.randint(0, len(gifs)-1)
+            index = random.randint(0, len(gifs)-1 if len(gifs)>0 else 0)
             url = (
                 gifs[index]
                 if len(gifs) > 0
