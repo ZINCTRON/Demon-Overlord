@@ -1,12 +1,13 @@
 version: "3.8"
 services: 
     bot:
-        image: localhost:5678/demonoverlord:latest # the image will be on the same device but pushed and built on and from other machines
+        image: demonoverlord:latest # the image will be on the same device but pushed and built on and from other machines
         ports:
             - "443:443"
         restart: always
         environment:
             DISCORD_MAIN_TOKEN:
+            DISCORD_TESTBOT_TOKEN:
             TENOR_TOKEN:
             POSTGRES_USER:
             POSTGRES_PASSWORD:

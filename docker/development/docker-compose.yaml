@@ -6,7 +6,7 @@ services:
             - "443:443"
         restart: "no"
         environment:
-            DISCORD_TESTBOT_TOKEN:
+            
             TENOR_TOKEN:
             POSTGRES_USER:
             POSTGRES_PASSWORD:
