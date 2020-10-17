@@ -6,11 +6,15 @@ A discord bot custom built for the use of The InnerDemons discord community
 
 ### THE BOT ONLY WORKS ON PYTHON 3.7+
 
-The bot uses three environment variables
+The bot uses five environment variables
 
 - DISCORD_TESTBOT_TOKEN
 - DISCORD_MAIN_TOKEN
 - TENOR_TOKEN
+- POSTGRES_USER
+- POSTGRES_PASSWORD
+- POSTGRES_ADDR (the server address, e.g `localhost:5000`)
+- POSTGRES_DB (the database the bot should use)
 
 *NOTE: You only need one of the bot keys.*
 
@@ -28,6 +32,11 @@ Once you have the bot key, add the environment vatriable.
 The demon overlord automatically installs other requirements when run incase you do not have the required permissons, use
 
 `pip --user install -r requirements.txt`
+
+After that you will need a local postgreSQL database and set the envvars accordingly. 
+
+you can find more info in the [https://www.postgresql.org/docs/9.3/tutorial-start.html](postgres documentation).
+
 
 ## Running The Bot
 
