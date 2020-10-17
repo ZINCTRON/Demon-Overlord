@@ -10,7 +10,7 @@ RUN pip install -r requirements.txt
 
 EXPOSE 443 50000-65535
 
-VOLUME DemonOverlord /bot/DemonOverlord
-VOLUME run.py /bot/run.py
+VOLUME ./DemonOverlord /bot/DemonOverlord
+VOLUME ./run.py /bot/run.py
 
 CMD ["python3.8", "-u", "run.py", "--prod"]
