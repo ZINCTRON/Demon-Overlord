@@ -30,7 +30,7 @@ else
     echo "$HOME/bot/database-data already exists..." 
 fi
 # only symlink the compose config so it is updated on pull
-if [ -f $HOME/bot/docker-compose.yaml ]; then
+if [ -e $HOME/bot/docker-compose.yaml ]; then
     echo "docker-compose link already exists, replacing..."
     rm $HOME/bot/docker-compose.yaml
 fi
