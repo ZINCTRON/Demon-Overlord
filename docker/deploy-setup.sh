@@ -14,9 +14,9 @@ fi
 
 echo "creating directories in ${HOME}/bot"
 mkdir  ~/bot ~/bot/registry ~/bot/db-data
-cp ./deploy/docker-compose.yaml ~/bot/docker-compose.yaml
+cp ./docker-compose.yaml ~/bot/docker-compose.yaml
 
-docker build -f ./deploy/Dockerfile -t demonoverlord:latest ..
+docker build -f ./Dockerfile -t demonoverlord:latest ..
 
 
 
