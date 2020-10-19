@@ -1,14 +1,14 @@
 # Deploy or Test the bot
 
-This directory holds all files to test and deploy. 
+This directory holds all files to test and deploy.
 
 ## Prerequisites
 
-BEFORE you do ANYTHING with these files, you will have to install Docker and Docker compose: 
+BEFORE you do ANYTHING with these files, you will have to install Docker and Docker compose:
 
-- Docker: https://docs.docker.com/get-docker/
+- [Docker](https://docs.docker.com/get-docker/)
 
-- Docker Compose: https://docs.docker.com/compose/install/
+- [Docker Compose](https://docs.docker.com/compose/install/)
 
 ## Testing
 
