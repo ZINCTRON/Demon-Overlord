@@ -17,8 +17,7 @@
         "db": {
             "postgres":[
                 "POSTGRES_USER",
-                "POSTGRES_PASSWORD",
-                "POSTGRES_DB"
+                "POSTGRES_PASSWORD"
             ]
         },
         "api": {
