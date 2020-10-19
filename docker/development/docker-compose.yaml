@@ -1,17 +1,5 @@
 version: "3.8"
 services: 
-    bot:
-        image: demonoverlord:testing # this is only for testing
-        ports:
-            - "443:443"
-        restart: "no"
-        environment:
-            
-            TENOR_TOKEN:
-            POSTGRES_USER:
-            POSTGRES_PASSWORD:
-        depends_on:
-            - "postgres"
     postgres:
         image: postgres:13.0
         restart: never

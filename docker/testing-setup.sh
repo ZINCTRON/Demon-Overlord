@@ -15,5 +15,3 @@ fi
 echo "creating directories"
 mkdir  ~/bot ~/bot/db-data
 cp ./development/docker-compose.yaml ~/bot/docker-compose.yaml
-
-docker build -f ./development/Dockerfile -t demonoverlord:testing ..

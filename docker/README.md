@@ -21,7 +21,7 @@ POSTGRES_PASSWORD
 POSTGRES_USER
 ```
 
-After that, just run `testing-setup.sh` to set everything up for testing in `~/bot` (this is where all data will be saved) and then `bot-run.sh` to run the bot. run `docker-compose restart -f ~/bot/docker-compose.yaml` to restart the bot after making changes to the code.
+After that, just run `testing-setup.sh` to set everything up for testing in `~/bot` (this is where all data will be saved) and then run the bot as you would normally.
 
 ## Deployment
 
