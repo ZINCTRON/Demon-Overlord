@@ -1,3 +1,4 @@
+#!/bin/bash
 if docker -v; then
     echo "Docker is installed"
 else
@@ -13,10 +14,30 @@ else
 fi
 
 echo "creating directories in ${HOME}/bot"
-mkdir  ~/bot ~/bot/registry ~/bot/db-data
-cp ./docker-compose.yaml ~/bot/docker-compose.yaml
+if [ ! -d "$HOME/bot" ]; then
+    mkdir  $HOME/bot 
+else
+    echo "$HOME/bot already exists..." 
+fi
+if [ ! -d "$HOME/bot/registry" ]; then
+    mkdir  $HOME/bot/registry 
+else
+    echo "$HOME/bot/registry already exists..." 
+fi
+if [ ! -d "$HOME/bot/database-data" ]; then
+    mkdir  $HOME/bot/database-data 
+else
+    echo "$HOME/bot/database-data already exists..." 
+fi
+# only symlink the compose config so it is updated on pull
+if [ -f $HOME/bot/docker-compose.yaml ]; then
+    echo "docker-compose link already exists, replacing..."
+    rm $HOME/bot/docker-compose.yaml
+fi
 
-docker build -f ./Dockerfile -t demonoverlord:latest ..
+ln -s $PWD/docker-compose.yaml $HOME/bot/docker-compose.yaml
+
+docker build -f $PWD/Dockerfile -t demonoverlord:latest ..
 
 
 
