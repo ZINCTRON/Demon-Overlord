@@ -25,7 +25,7 @@ To get the bot keys
 3. Go to `Applications` and select the bot you want.
 4. Got to `Bots` copy the `TOKEN` next to the bot icon
 
-Once you have the bot key, add the environment vatriable.
+Once you have the bot key, add the environment variable (this is how you do it in linux. For windows instructions, please consult the internet).
 
 `export <var_name>=<token_value>`
 
@@ -33,9 +33,9 @@ The demon overlord automatically installs other requirements when run incase you
 
 `pip --user install -r requirements.txt`
 
-After that you will need a local postgreSQL database and set the envvars accordingly. 
+After that you will need a local postgreSQL database and set the envvars accordingly.
 
-you can find more info in the [https://www.postgresql.org/docs/9.3/tutorial-start.html](postgres documentation).
+you can find more info in the [postgres documentation](https://www.postgresql.org/docs/9.3/tutorial-start.html).
 
 
 ## Running The Bot
