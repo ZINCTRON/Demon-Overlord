@@ -21,16 +21,9 @@ services:
         environment: 
             POSTGRES_USER:
             POSTGRES_PASSWORD:
-            POSTGRES_DB: bot
+            POSTGRES_DB: bot_core
         volumes: 
             - ~/bot/database-data:/var/lib/postgresql/data
-    adminer:
-        image: adminer
-        restart: always
-        ports:
-            - "8080:8080"
-        depends_on:
-            - "postgres"
-
+        
 
     
