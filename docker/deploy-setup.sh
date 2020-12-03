@@ -1,12 +1,15 @@
 #!/bin/bash
-if docker -v; then
+
+DOCKER="$(which docker)"
+DOCKER_COMPOSE="$(which docker-compose)"
+if exec $DOCKER -v; then
     echo "Docker is installed"
 else
     echo "please install docker and docker compose first"
     exit 1
 fi
 
-if docker-compose -v; then
+if exec $DOCKER_COMPOSE -v; then
     echo "docker-compose is installed"
 else
     echo "please install docker-compose first"
@@ -37,7 +40,7 @@ fi
 
 ln -s $PWD/docker-compose.yaml $HOME/bot/docker-compose.yaml
 
-docker build -f $PWD/Dockerfile -t demonoverlord:latest ..
+exec $DOCKER build -f $PWD/Dockerfile -t demonoverlord:latest ..
 
 
 
