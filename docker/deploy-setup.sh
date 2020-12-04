@@ -1,12 +1,13 @@
 #!/bin/bash
-if `$(which docker) -v`; then
+# change that will show in the update script
+if $(which docker) -v; then
     echo "Docker is installed"
 else
     echo "please install docker and docker compose first"
     exit 1
 fi
 
-if `$(which docker-compose) -v`; then
+if $(which docker-compose) -v; then
     echo "docker-compose is installed"
 else
     echo "please install docker-compose first"
@@ -37,7 +38,7 @@ fi
 
 ln -s $PWD/docker-compose.yaml $HOME/bot/docker-compose.yaml
 
-`$(which docker) build -f $PWD/Dockerfile -t demonoverlord:latest ..`
+$(which docker) build -f $PWD/Dockerfile -t demonoverlord:latest ..
 
 
 
