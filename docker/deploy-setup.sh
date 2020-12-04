@@ -1,4 +1,5 @@
 #!/bin/bash
+# change that will show in the update script
 if $(which docker) -v; then
     echo "Docker is installed"
 else
