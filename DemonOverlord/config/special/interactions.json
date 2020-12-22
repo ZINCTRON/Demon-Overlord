@@ -14,7 +14,6 @@
                 "https://media1.tenor.com/images/be96db9b9acfd04fd2f5d890e2c51781/tenor.gif",
                 "https://media1.tenor.com/images/e9170f1737736e73dcfbbe99e21b3839/tenor.gif"
             ]
-
         },
         "bored": {
             "query": "bored",
@@ -179,7 +178,7 @@
                 "https://media1.tenor.com/images/070c039be327a4f839832fc104f707af/tenor.gif",
                 "https://media1.tenor.com/images/2cf373aef8fedfa21cc1f5587a6f9e2b/tenor.gif",
                 "https://media1.tenor.com/images/eaac56a1d02536ed416b5a080fdf73ba/tenor.gif",
-                "https://media1.tenor.com/images/68c5ef2709e274e4cdb62f38d7bad781/tenor.gif" 
+                "https://media1.tenor.com/images/68c5ef2709e274e4cdb62f38d7bad781/tenor.gif"
             ]
         },
         "eat": {
@@ -227,44 +226,44 @@
                 "https://media1.tenor.com/images/cd2b226b8a037f39cb8096d8c745ab99/tenor.gif"
             ]
         },
-    "peek": {
-        "query": "peek",
-        "type": "alone",
-        "action": "peeks",
-        "emoji": "hello",
-        "gifs": [
-            "https://media1.tenor.com/images/4966f06531fa2ae23895ff5fe02f8547/tenor.gif",
-            "https://media1.tenor.com/images/94cfaf3becbef687fd29dbc8842e70b6/tenor.gif",
-            "https://media1.tenor.com/images/844b3b4e6edaac62c45a13cb384d692e/tenor.gif",
-            "https://media1.tenor.com/images/cfc30edea7b7b170e1c77c44023d1a65/tenor.gif",
-            "https://media1.tenor.com/images/0f9dfe4e627c9be70b01923af7a6555e/tenor.gif",
-            "https://media1.tenor.com/images/d23fbc96f10c26d004ebe2324a8de513/tenor.gif",
-            "https://media1.tenor.com/images/231a0d24ec55a7e4293693db15a3e5ed/tenor.gif",
-            "https://media1.tenor.com/images/876853daf0640995eb8dba220c66499d/tenor.gif",
-            "https://media1.tenor.com/images/cf5cb24131c1fdae3150958515ffac36/tenor.gif",
-            "https://media1.tenor.com/images/daec7d16bef2e33d34c1cf0da2ebe8a4/tenor.gif"
-        ]
+        "peek": {
+            "query": "peek",
+            "type": "alone",
+            "action": "peeks",
+            "emoji": "hello",
+            "gifs": [
+                "https://media1.tenor.com/images/4966f06531fa2ae23895ff5fe02f8547/tenor.gif",
+                "https://media1.tenor.com/images/94cfaf3becbef687fd29dbc8842e70b6/tenor.gif",
+                "https://media1.tenor.com/images/844b3b4e6edaac62c45a13cb384d692e/tenor.gif",
+                "https://media1.tenor.com/images/cfc30edea7b7b170e1c77c44023d1a65/tenor.gif",
+                "https://media1.tenor.com/images/0f9dfe4e627c9be70b01923af7a6555e/tenor.gif",
+                "https://media1.tenor.com/images/d23fbc96f10c26d004ebe2324a8de513/tenor.gif",
+                "https://media1.tenor.com/images/231a0d24ec55a7e4293693db15a3e5ed/tenor.gif",
+                "https://media1.tenor.com/images/876853daf0640995eb8dba220c66499d/tenor.gif",
+                "https://media1.tenor.com/images/cf5cb24131c1fdae3150958515ffac36/tenor.gif",
+                "https://media1.tenor.com/images/daec7d16bef2e33d34c1cf0da2ebe8a4/tenor.gif"
+            ]
+        },
+        "confused": {
+            "query": "confused",
+            "type": "alone",
+            "action": "is confused",
+            "emoji": "what",
+            "gifs": [
+                "https://media1.tenor.com/images/d2f434d8632fc45c1fc709689e8d908b/tenor.gif",
+                "https://media1.tenor.com/images/89d55748e5ae70caa2828b3768112c09/tenor.gif",
+                "https://media1.tenor.com/images/2e9b1c1a508cb7d5b7e6cd0600e1c1c2/tenor.gif",
+                "https://media1.tenor.com/images/aea2b3b7a199c1d5de88f71e7f5a3a95/tenor.gif",
+                "https://media1.tenor.com/images/b970a5b9301e9f4895a4739999ed24a6/tenor.gif",
+                "https://media1.tenor.com/images/e765e06eb21f7bdd41eb6605222c4f60/tenor.gif",
+                "https://media1.tenor.com/images/b4e998013ffce08bd0416d499dfbd6be/tenor.gif",
+                "https://media1.tenor.com/images/ea8a415b5533d169f336859c148cca71/tenor.gif",
+                "https://media1.tenor.com/images/db761c3b514b85e0bae38d88383714c8/tenor.gif",
+                "https://media1.tenor.com/images/88d015a1213cd2f65a469db5ca0c51e7/tenor.gif",
+                "https://media1.tenor.com/images/eacde875b7c910facce71e92f4ede7b5/tenor.gif"
+            ]
+        }
     },
-    "confused": {
-        "query": "confused",
-        "type": "alone",
-        "action": "is confused",
-        "emoji": "what",
-        "gifs": [
-            "https://media1.tenor.com/images/d2f434d8632fc45c1fc709689e8d908b/tenor.gif",
-            "https://media1.tenor.com/images/89d55748e5ae70caa2828b3768112c09/tenor.gif",
-            "https://media1.tenor.com/images/2e9b1c1a508cb7d5b7e6cd0600e1c1c2/tenor.gif",
-            "https://media1.tenor.com/images/aea2b3b7a199c1d5de88f71e7f5a3a95/tenor.gif",
-            "https://media1.tenor.com/images/b970a5b9301e9f4895a4739999ed24a6/tenor.gif",
-            "https://media1.tenor.com/images/e765e06eb21f7bdd41eb6605222c4f60/tenor.gif",
-            "https://media1.tenor.com/images/b4e998013ffce08bd0416d499dfbd6be/tenor.gif",
-            "https://media1.tenor.com/images/ea8a415b5533d169f336859c148cca71/tenor.gif",
-            "https://media1.tenor.com/images/db761c3b514b85e0bae38d88383714c8/tenor.gif",
-            "https://media1.tenor.com/images/88d015a1213cd2f65a469db5ca0c51e7/tenor.gif",
-            "https://media1.tenor.com/images/eacde875b7c910facce71e92f4ede7b5/tenor.gif"
-        ]
-    }
-},
     "combine": {
         "wave": {
             "query": "wave",
@@ -580,6 +579,7 @@
             "type": "social",
             "action": "kicks",
             "emoji": "izzyeyes",
+            "self": [],
             "gifs": [
                 "",
                 "",
@@ -599,6 +599,7 @@
             "type": "social",
             "action": "snuggles with",
             "emoji": "izzyhug",
+            "self": [],
             "gifs": [
                 "",
                 "",
@@ -618,6 +619,7 @@
             "type": "social",
             "action": "holds hands with",
             "emoji": "izzyhug",
+            "self": [],
             "gifs": [
                 "",
                 "",
@@ -637,6 +639,7 @@
             "type": "social",
             "action": "kisses",
             "emoji": "izzyhug",
+            "self": [],
             "gifs": [
                 "",
                 "",
@@ -656,6 +659,7 @@
             "type": "social",
             "action": "hugs",
             "emoji": "izzyhug",
+            "self": [],
             "gifs": [
                 "https://cdn.weeb.sh/images/B11CDkhqM.gif",
                 "https://media1.tenor.com/images/76c1d2356a761dd53d58cf23a79c7021/tenor.gif",
@@ -681,13 +685,13 @@
                 "https://media1.tenor.com/images/2f922b822293c4aedac493bcbcadbc7a/tenor.gif",
                 "https://thumbs.gfycat.com/BlissfulSpiffyGavial-size_restricted.gif"
             ]
-        
         },
         "pat": {
             "query": "pat",
             "type": "social",
             "action": "pats",
             "emoji": "trashlove",
+            "self": [],
             "gifs": [
                 "",
                 "",
@@ -707,8 +711,9 @@
             "type": "social",
             "action": "pokes",
             "emoji": "hello",
+            "self": [],
             "gifs": [
-                "",
+                "https://i.imgur.com/yLyrq13.gif",
                 "",
                 "",
                 "",
@@ -726,6 +731,7 @@
             "type": "social",
             "action": "shoots",
             "emoji": "izzyeyes",
+            "self": [],
             "gifs": [
                 "",
                 "",
@@ -745,6 +751,7 @@
             "type": "social",
             "action": "slaps",
             "emoji": "izzyeyes",
+            "self": [],
             "gifs": [
                 "",
                 "",
@@ -764,6 +771,7 @@
             "type": "social",
             "action": "tackles",
             "emoji": "izzyeyes",
+            "self": [],
             "gifs": [
                 "",
                 "",
@@ -783,6 +791,7 @@
             "type": "social",
             "action": "stabs",
             "emoji": "knife",
+            "self": [],
             "gifs": [
                 "",
                 "",
@@ -797,7 +806,7 @@
                 ""
             ]
         },
-                "eat": {
+        "eat": {
             "query": "eat",
             "type": "combine",
             "emoji": "siip",
@@ -805,6 +814,7 @@
                 "alone": "eats.",
                 "social": "eats with"
             },
+            "self": [],
             "gifs": [
                 "",
                 "",
@@ -824,6 +834,7 @@
             "type": "social",
             "action": "highfives",
             "emoji": "happyizzy",
+            "self": [],
             "gifs": [
                 "",
                 "",
@@ -840,4 +851,3 @@
         }
     }
 }
-
