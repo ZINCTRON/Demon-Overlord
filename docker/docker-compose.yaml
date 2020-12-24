@@ -6,7 +6,15 @@ services:
             - "443:443"
         restart: always
         env_file:
-            - ~/bot/.env
+            - ~/bot/bot.env
+        environment:
+            DISCORD_MAIN_TOKEN:
+            DISCORD_TESTBOT_TOKEN:
+            TENOR_TOKEN:
+            POSTGRES_USER:
+            POSTGRES_PASSWORD:
+            POSTGRES_SERVER: postgres
+            POSTGRES_DB: DemonOverlord
         depends_on:
             - "postgres"
     postgres:
@@ -15,7 +23,11 @@ services:
         ports:
             - "5432:5432"
         env_file:
-            - ~/bot/.env
+            - ~/bot/bot.env
+        environment: 
+            POSTGRES_USER: 
+            POSTGRES_PASSWORD:
+            POSTGRES_DB: DemonOverlord
         volumes: 
             - ~/bot/database-data:/var/lib/postgresql/data
         

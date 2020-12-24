@@ -1,16 +1,17 @@
+import discord
+import pkgutil
+import traceback
+from importlib import import_module
+
+# core imports
+import DemonOverlord.core.modules as cmds
 from DemonOverlord.core.util.responses import (
     TextResponse,
     RateLimitResponse,
     ErrorResponse,
     BadCommandResponse,
 )
-from importlib import import_module
-from inspect import getmembers
 
-import discord
-import pkgutil
-import traceback
-import DemonOverlord.core.modules as cmds
 
 
 class Command(object):
@@ -19,6 +20,7 @@ class Command(object):
         # initialize all properties
         self.invoked_by = message.author
         self.mentions = message.mentions
+        self.guild = message.guild
         self.action = None
         self.bot = bot
         self.channel = message.channel
@@ -64,40 +66,34 @@ class Command(object):
     async def exec(self) -> None:
         # try catch for generic error
         try:
-            try:
-                if (self.command in dir(cmds)) and (not self.short):
-                    limit = self.bot.commands.ratelimits.exec(self)
+            if (self.command in dir(cmds)) and (not self.short):
+                limit = self.bot.commands.ratelimits.exec(self)
 
-                    # see if limiter is active, if not, execute the command
-                    if not limit["isActive"]:
-                        response = await getattr(cmds, self.command).handler(self)
-                    else:
-                        # rate limit error
-                        response = RateLimitResponse(self, limit["timeRemain"])
-                elif self.short:
-                    return  # shorthand commands are handled by their respective module. e.g. minesweeper
-
+                # see if limiter is active, if not, execute the command
+                if not limit["isActive"]:
+                    response = await getattr(cmds, self.command).handler(self)
                 else:
-                    response = BadCommandResponse(self)
-            except:
-                response = ErrorResponse(self, traceback.format_exc())
+                    # rate limit error
+                    response = RateLimitResponse(self, limit["timeRemain"])
+            elif self.short:
+                return  # shorthand commands are handled by their respective module. e.g. minesweeper
 
-            # Send the message
-            message = await self.channel.send(embed=response)
+            else:
+                response = BadCommandResponse(self)
+        except Exception:
+            response = ErrorResponse(self, traceback.format_exc())
 
-            # remove error messages and messages with timeout
-            if isinstance(response, (TextResponse)):
-                if response.timeout > 0:
-                    await message.delete(delay=response.timeout)
+        # Send the message
+        message = await self.channel.send(embed=response)
 
-                if isinstance(response, (ErrorResponse)):
+        # remove error messages and messages with timeout
+        if isinstance(response, (TextResponse)):
+            if response.timeout > 0:
+                await message.delete(delay=response.timeout)
 
-                    # send an error meassage to dev channel
-                    dev_channel = message.guild.get_channel(684100408700043303)
-                    await dev_channel.send(embed=response)
-            await self.message.delete()
-        except:
-            pass  # we don't have to do anything, we just don't want an error message that we expect anyways
+            if isinstance(response, (ErrorResponse)):
 
-    async def rand_status(self) -> discord.BaseActivity:
-        pass
+                # send an error meassage to dev channel
+                dev_channel = message.guild.get_channel(684100408700043303)
+                await dev_channel.send(embed=response)
+        await self.message.delete()
