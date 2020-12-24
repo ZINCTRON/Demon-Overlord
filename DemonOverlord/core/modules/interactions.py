@@ -68,17 +68,20 @@ async def handler(command) -> discord.Embed:
             )
             self_mention = False
             interact = social_interactions[command.action]
+            user = command.invoked_by
 
-            if command.invoked_by.display_name in mentions:
+            if command.invoked_by.display_name in mentions and len(interact["self"]) > 0:
+                print(mentions)
                 url = await command.bot.api.tenor.get_interact(
                     f'anime {social_interactions["hug"]["query"]}'
                 )
                 mentions = [command.invoked_by.display_name]
                 self_mention = True
                 interact = social_interactions["hug"]
+                user = command.bot.user
 
             interact = SocialInteraction(
-                command.bot, interact, command.bot.user, mentions, url, self_mention=self_mention
+                command.bot, interact, user , mentions, url, self_mention=self_mention
             )
 
         # these are combine interactions, interactions that are capable of alone AND social interaction behavior
@@ -180,11 +183,7 @@ class SocialInteraction(Interaction):
 
         if self_mention:
             
-            self.description = (
-                random.choice(interaction_type["self"])
-                if len(interaction_type["self"]) > 0
-                else ""
-            )
+            self.description = random.choice(interaction_type["self"])
 
 
 class CombineInteraction(Interaction):
