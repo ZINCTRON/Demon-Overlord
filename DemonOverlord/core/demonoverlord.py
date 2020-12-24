@@ -78,7 +78,7 @@ class DemonOverlord(discord.Client):
         print(LogMessage(f"set intents to: {intents.value}", time=False))
 
         # initializing discord client
-        super().__init__(intents=intents, presence=presence)
+        super().__init__(intents=intents, activity=presence)
 
     @staticmethod
     async def change_status(client: discord.Client) -> None:
