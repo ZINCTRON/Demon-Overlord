@@ -17,7 +17,7 @@ async def handler(command) -> discord.Embed:
 
     # if not, we can just return a badCommand
     else:
-        BadCommandResponse(command)
+        return BadCommandResponse(command)
 
 
 class DiceResponse(TextResponse):
