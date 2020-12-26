@@ -313,3 +313,4 @@ class GameInteraction(CombineInteraction):
                 if not steamdata== None:
                     self.url = steamdata["store_url"]
                     self.set_thumbnail(url=steamdata["image_url"])
+                    self.description = f"{self.user.display_name} seems to be playing a game, click on the title to go to its steam store page."

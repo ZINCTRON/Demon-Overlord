@@ -102,7 +102,7 @@ class SteamAPI(API):
     async def get_gamedata(self, bot, game:str) -> dict:
         try:
             with bot.database.connection_main.cursor() as cursor:
-                cursor.execute("SELECT * FROM public.steam_data WHERE game_name LIKE %s", [f"%{game}%"])
+                cursor.execute("SELECT store_url, image_url FROM public.steam_data WHERE game_name LIKE %s ORDER BY appid ASC", [f"%{game}%"])
                 results = cursor.fetchall()
                 if len(results) == 0:
                     return None
