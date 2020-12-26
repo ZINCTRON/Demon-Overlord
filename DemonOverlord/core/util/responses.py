@@ -63,8 +63,10 @@ class ErrorResponse(TextResponse):
             color=0xFF0000,
             icon="🚫",
         )
-        self.timeout = 10
-
+        self.timeout = 60
+        self.description = "An internal error occured. This message will remove itself after 60 seconds to not clutter the chat, please make a screenshot and send it in a bug report on github."
+        self.url="https://github.com/Dragonsight91/Demon-Overlord/issues"
+        self.set_author(name="DemonOverlord", icon_url="https://cdn.discordapp.com/avatars/684101090429632534/f3982bfaaa59c042aa0895d7ca7c7a36.png")
         self.add_field(name="Full Command:", value=command.full, inline=False)
         self.add_field(name="Message:", value=f"```\n{tb}\n```", inline=False)
 

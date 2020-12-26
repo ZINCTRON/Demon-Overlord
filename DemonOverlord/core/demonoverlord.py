@@ -197,5 +197,6 @@ class DemonOverlord(discord.Client):
 
                 # build the command and execute it
                 command = Command(self, message)
-                print(LogCommand(command))
-                await command.exec()
+                if not command.none:
+                   print(LogCommand(command))
+                   await command.exec()

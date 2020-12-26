@@ -28,10 +28,16 @@ class Command(object):
         self.special = None
         self.message = message
         self.short = False
+        self.none=False
 
         # create the command
         to_filter = ["", " ", None]
         temp = list(filter(lambda x: not x in to_filter, message.content.split(" ")))
+
+        if len(temp) < 2:
+            self.none=True
+            return
+
         self.prefix = temp[0]
         self.command = temp[1]
         if self.command in bot.commands.short:
@@ -65,6 +71,7 @@ class Command(object):
 
     async def exec(self) -> None:
         # try catch for generic error
+
         try:
             if (self.command in dir(cmds)) and (not self.short):
                 limit = self.bot.commands.ratelimits.exec(self)
@@ -90,10 +97,4 @@ class Command(object):
         if isinstance(response, (TextResponse)):
             if response.timeout > 0:
                 await message.delete(delay=response.timeout)
-
-            if isinstance(response, (ErrorResponse)):
-
-                # send an error meassage to dev channel
-                dev_channel = message.guild.get_channel(684100408700043303)
-                await dev_channel.send(embed=response)
         await self.message.delete()
