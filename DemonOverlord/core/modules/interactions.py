@@ -66,22 +66,24 @@ async def handler(command) -> discord.Embed:
             url = await command.bot.api.tenor.get_interact(
                 f'anime {social_interactions[command.action]["query"]}'
             )
-            self_mention = False
-            interact = social_interactions[command.action]
-            user = command.invoked_by
 
-            if command.invoked_by.display_name in mentions and len(interact["self"]) > 0:
+            interaction = social_interactions[command.action]
+            user = command.invoked_by
+            interaction_prev = None
+
+            if command.invoked_by.display_name in mentions and len(interaction["self"]) > 0:
                 print(mentions)
                 url = await command.bot.api.tenor.get_interact(
                     f'anime {social_interactions["hug"]["query"]}'
                 )
+                interaction_prev = interaction
                 mentions = [command.invoked_by.display_name]
-                self_mention = True
-                interact = social_interactions["hug"]
+
+                interaction = social_interactions["hug"]
                 user = command.bot.user
 
             interact = SocialInteraction(
-                command.bot, interact, user , mentions, url, self_mention=self_mention
+                command.bot, interaction, user , mentions, url, interaction_prev=interaction_prev
             )
 
         # these are combine interactions, interactions that are capable of alone AND social interaction behavior
@@ -170,11 +172,10 @@ class SocialInteraction(Interaction):
         user: discord.Member,
         mentions: list,
         url: str,
-        self_mention=False,
+        interaction_prev=None,
     ):
         # initialize the super class
         super().__init__(bot, interaction_type, user, url, color=0xA251AF)
-
         # parse the interaction
         if len(mentions) > 1:
             self.interact_with = f'{", ".join(mentions[:-1])} and {mentions[-1]}'
@@ -183,9 +184,11 @@ class SocialInteraction(Interaction):
 
         self.title = f'{bot.config.izzymojis[interaction_type["emoji"]]} {user.display_name} {interaction_type["action"]} {self.interact_with}'
 
-        if self_mention:
+        if not interaction_prev == None:
+            self.description = random.choice(interaction_prev["self"])
+
             
-            self.description = random.choice(interaction_type["self"])
+            
 
 
 class CombineInteraction(Interaction):
@@ -204,7 +207,7 @@ class CombineInteraction(Interaction):
         color: int = 0xA251AF,
     ):
         # initialize the super class
-        super().__init__(bot, interaction_type, user, url, color=color)
+        super().__init__(bot, interaction_type, user, url, color=color, )
 
         # parse the mentions, so we can set them properly or act as base interaction
         if len(mentions) > 1:
