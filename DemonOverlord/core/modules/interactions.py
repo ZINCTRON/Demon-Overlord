@@ -314,3 +314,7 @@ class GameInteraction(CombineInteraction):
                     self.url = steamdata["store_url"]
                     self.set_thumbnail(url=steamdata["image_url"])
                     self.description = f"{self.user.display_name} seems to be playing a game, click on the title to go to its steam store page."
+                    if self.game.name =="Vecter":
+                        self.set_footer(text="Taranasus", icon_url="https://cdn.discordapp.com/avatars/293132462907850753/f28fe56a65f803416b7c892c78d48ad6.webp")
+                        self.set_author(name="Vecter Discord", url="https://discord.gg/9Bg9yCbf9E", icon_url="https://cdn.discordapp.com/icons/569921525575319562/a_99ae10aba7159a481c572c7d767f724f.webp")
+                            
