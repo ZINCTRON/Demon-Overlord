@@ -66,6 +66,10 @@ class Command(object):
             or temp[1] in bot.commands.interactions["combine"]
         ):
             self.reference = message.reference
+
+            if self.reference != None:
+                self.mentions = list(filter(lambda x: x != x.guild.me, self.mentions))
+            
             self.command = "interactions"
             self.action = temp[1]
             self.special = bot.commands.interactions
@@ -99,10 +103,13 @@ class Command(object):
 
             else:
                 response = BadCommandResponse(self)
+                self.reference = None
         except discord.Forbidden:
             response = MissingPermissionResponse(self, traceback.format_exc())
+            self.reference = None
         except Exception:
             response = ErrorResponse(self, traceback.format_exc())
+            self.reference = None
  
         # Send the message
         message = await self.channel.send(embed=response, reference=self.reference)
