@@ -6,7 +6,7 @@ import time
 import psycopg2
 
 
-from DemonOverlord.core.util.logger import LogHeader, LogMessage, LogType, LogFormat
+from DemonOverlord.core.util.logger import LogMessage, LogType, LogFormat
 
 async def change_status(client: discord.Client) -> None:
     """
