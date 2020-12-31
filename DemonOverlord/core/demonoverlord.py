@@ -242,6 +242,5 @@ class DemonOverlord(discord.Client):
 
                 # build the command and execute it
                 command = Command(self, message)
-                if not command.none:
-                   print(LogCommand(command))
-                   await command.exec()
+                print(LogCommand(command))
+                await command.exec()
