@@ -73,9 +73,26 @@ class WelcomeResponse(TextResponse):
                         channel_name = group["ctrl_seq"]
                         channel = discord.utils.get(guild.channels, name=channel_name)
 
+                        if group["ctrl_arg"] == "name":
+                            var = channel.name
+                        elif group["ctrl_arg"] == "id":
+                            var = channel.id
+                        elif group["ctrl_arg"] == "mention":
+                            var = channel.mention
+                        else:
+                            var = channel.name
+
                     elif group["ctrl_char"] == "!":
                         role_name = group["ctrl_seq"]
                         role = discord.utils.get(guild.roles, name=role_name)
+                        if group["ctrl_arg"] == "name":
+                            var = role.display_name
+                        elif group["ctrl_arg"] == "id":
+                            var = role.id
+                        elif group["ctrl_arg"] == "mention":
+                            var = role.mention
+                        else:
+                            var = role.name
                     else:
                         if group["ctrl_seq"] == "server":
                             if group["ctrl_arg"] == "name":
