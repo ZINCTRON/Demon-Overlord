@@ -2,6 +2,10 @@ import discord
 import os
 import random
 import asyncio
+import re
+
+from discord import guild
+from discord import embeds
 
 
 # core imports
@@ -12,7 +16,9 @@ from DemonOverlord.core.util.config import (
     DatabaseConfig,
     APIConfig,
 )
+
 from DemonOverlord.core.util.command import Command
+from DemonOverlord.core.util.responses import WelcomeResponse
 from DemonOverlord.core.util.logger import (
     LogCommand,
     LogMessage,
@@ -97,8 +103,51 @@ class DemonOverlord(discord.Client):
         await self.database.add_guild(guild.id)
 
     async def on_guild_remove(self, guild) -> None:
-        print(LogMessage(f"Removed guild {guild.name}, removing all data from database"))
+        print(
+            LogMessage(f"Removed guild {guild.name}, removing all data from database")
+        )
         await self.database.remove_guild(guild.id)
+
+    async def on_member_join(self, member: discord.Member):
+        if self.local or member.pending: return
+        autoroles = await self.database.get_autorole(member.guild.id)
+        if autoroles != None:
+            role = member.guild.get_role(autoroles["role_id"])
+            roles = [role] if role else []
+
+            if len(roles) >0:
+                try:
+                    await member.add_roles(*roles, reason="Automatic Role Assignment", atomic=True)
+                    print(LogMessage("Autorole assigned successfully"))
+                except discord.errors.Forbidden:
+                    print(LogMessage(f"Issue on Server '{member.guild}', permissions missing."))
+
+        welcome = await self.database.get_welcome(member.guild.id)
+        if welcome != None:
+            response = WelcomeResponse(welcome, self, member)
+            await response.channel.send(embed=response)
+
+    async def on_member_update(self, before: discord.Member, after: discord.Member):
+        await self.wait_until_done()
+        
+        if not after.pending and before.pending != after.pending:
+
+            autoroles = await self.database.get_autorole(after.guild.id, wait_pending=True)
+            if autoroles != None:
+                role = after.guild.get_role(autoroles["role_id"])
+                roles = [role] if role else []
+
+                if len(roles) >0:
+                    try:
+                        await after.add_roles(*roles, reason="Automatic Role Assignment", atomic=True)
+                        print(LogMessage("Autorole assigned successfully"))
+                    except discord.errors.Forbidden:
+                        print(LogMessage(f"Issue on Server '{after.guild}', permissions missing."))
+
+            welcome = await self.database.get_welcome(after.guild.id, wait_pending=True)
+            if welcome != None and welcome["wait_pending"]:
+                    welcome = WelcomeResponse(welcome, self, after)
+                    await welcome.channel.send(embed=welcome)
 
     async def on_ready(self) -> None:
         print(LogHeader("CONNECTED SUCCESSFULLY"))
@@ -158,14 +207,8 @@ class DemonOverlord(discord.Client):
                 else:
                     print(LogMessage("All Tables are in place and seem to be correct."))
 
-                # test data in tables, since certain entries NEED to exist
-                print(LogMessage("Checking Table Data"))
-                if not await self.database.data_test(self.guilds):
-                    print(LogMessage("Some default data desn't exist, trying to correct...", msg_type=LogType.WARNING))
-                    await self.database.data_fix()
-                else:
-                    print(LogMessage("All Servers are in place and seem to be correctly set up."))
-
+                # print(LogMessage("Updating Guild status...."))
+                # self.database.update_guilds(self.guilds)
 
             except Exception as e:
                 # catch all errors and log them
@@ -177,6 +220,8 @@ class DemonOverlord(discord.Client):
                 )
                 print(LogMessage(e, msg_type=LogType.ERROR))
                 self.local = True
+        for guild in self.guilds:
+            print(f"Joined guild {guild.name} at {guild.me.joined_at}")
 
         # finish up and send the ready event
         print(LogHeader("startup done"))

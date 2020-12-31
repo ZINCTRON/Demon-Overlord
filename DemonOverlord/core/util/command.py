@@ -1,3 +1,4 @@
+from DemonOverlord.core.util.logger import LogCommand
 import discord
 import pkgutil
 import traceback
@@ -10,6 +11,7 @@ from DemonOverlord.core.util.responses import (
     RateLimitResponse,
     ErrorResponse,
     BadCommandResponse,
+    MissingPermissionResponse,
 )
 
 
@@ -20,6 +22,7 @@ class Command(object):
         # initialize all properties
         self.invoked_by = message.author
         self.mentions = message.mentions
+        self.channels = message.channel_mentions
         self.guild = message.guild
         self.action = None
         self.bot = bot
@@ -28,7 +31,8 @@ class Command(object):
         self.special = None
         self.message = message
         self.short = False
-        self.none=False
+        self.params = None
+        self.reference = None
 
         # create the command
         to_filter = ["", " ", None]
@@ -39,7 +43,14 @@ class Command(object):
             return
 
         self.prefix = temp[0]
-        self.command = temp[1]
+        if len(temp) > 1:
+            self.command = temp[1]
+        else:
+            # empty command
+            self.err = True
+            self.command = None
+            return
+
         if self.command in bot.commands.short:
             self.short = True
 
@@ -54,10 +65,12 @@ class Command(object):
             or temp[1] in bot.commands.interactions["social"]
             or temp[1] in bot.commands.interactions["combine"]
         ):
+            self.reference = message.reference
             self.command = "interactions"
             self.action = temp[1]
             self.special = bot.commands.interactions
             self.params = temp[2:] if len(temp) > 2 else None
+
 
         # WE LUV
         elif self.command == "chat":
@@ -74,10 +87,9 @@ class Command(object):
 
         try:
             if (self.command in dir(cmds)) and (not self.short):
-                limit = self.bot.commands.ratelimits.exec(self)
-
                 # see if limiter is active, if not, execute the command
-                if not limit["isActive"]:
+                # limiter removed temporarily. 
+                if not False:
                     response = await getattr(cmds, self.command).handler(self)
                 else:
                     # rate limit error
@@ -87,11 +99,13 @@ class Command(object):
 
             else:
                 response = BadCommandResponse(self)
+        except discord.Forbidden:
+            response = MissingPermissionResponse(self, traceback.format_exc())
         except Exception:
             response = ErrorResponse(self, traceback.format_exc())
-
+ 
         # Send the message
-        message = await self.channel.send(embed=response)
+        message = await self.channel.send(embed=response, reference=self.reference)
 
         # remove error messages and messages with timeout
         if isinstance(response, (TextResponse)):
