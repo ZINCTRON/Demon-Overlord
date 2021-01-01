@@ -32,7 +32,6 @@ def run():
         print(LogMessage("Bot Stopped, exiting gracefully", msg_type=LogType.WARNING))
         bot.database.connection_main.close()
         bot.database.connection_maintenance.close()
-        asyncio.run(bot.api.close_connections())
 
 
 if __name__ == "__main__" and not missing_module:

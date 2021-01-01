@@ -14,10 +14,7 @@ class API:
         self.apikey = apikey
         self.name = name
         self.url = url
-        self.session = aiohttp.ClientSession()
 
-    async def close(self):
-        await self.session.close()
 
 
 class TenorAPI(API):
@@ -33,11 +30,11 @@ class TenorAPI(API):
     async def get_interact(self, name: str) -> str:
         try:
             url = f'{self.url}?q={name.replace(" ", "+")}&key={self.apikey}&limit=20'
-            
-            async with await self.session.get(url) as response:
-                assert response.status == 200
-                data = await response.json()
-                res_list = list(data["results"])
+            async with aiohttp.ClientSession() as session:
+                async with await session.get(url) as response:
+                    assert response.status == 200
+                    data = await response.json()
+                    res_list = list(data["results"])
 
         except Exception:
             return False
@@ -57,33 +54,22 @@ class InspirobotAPI(API):
     def __init__(self):
         super().__init__("", "inspirobot", "https://inspirobot.me")
 
-    # get the list of stuff from inspirobot
-    async def __get_flow(self) -> str:
+    # public function that gets data from inspiro and then gets the shortest quote
+    async def get_quote(self) -> str:
 
         # let's try getting something
         try:
             # you know... i don't like that you treat me like an object...
-            url = f"{self.url}/api?generate=true"
-            async with await self.session.get(self.url) as response:
-                assert response.status == 200
-                return await response.json()
-
-        except Exception:
+            res = None
+            async with aiohttp.ClientSession() as session:
+                async with await session.get(f"{self.url}/api?generate=true") as response:
+                    assert response.status == 200
+                    res = await response.text()
+                
+            return res
+        except Exception as e:
             # I've had enough of this... this is just WRONG
             return None
-
-    # public function that gets data from inspiro and then gets the shortest quote
-    async def get_quote(self) -> str:
-
-        # get a flow and init quotes array
-        img = await self.__get_flow()
-
-        # FUCK, NO. WHY DOESN'T THIS WORK???? ~ Luzi
-        if not img:
-            return False
-
-        # return the image
-        return img
 
 
 class SteamAPI(API):
@@ -93,9 +79,10 @@ class SteamAPI(API):
     async def get_appdata(self) -> dict:
         try:
             print(LogMessage(f"Trying to get steam appdata from '{self.url}'") )
-            async with await self.session.get(self.url) as response:
-                assert response.status == 200
-                return await response.json()
+            async with aiohttp.ClientSession() as session:
+                async with await session.get(self.url) as response:
+                    assert response.status == 200
+                    return await response.json()
         except AssertionError:
             print(LogMessage(f"Getting steam appdata failed.")) 
 
