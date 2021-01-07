@@ -1,5 +1,6 @@
 import discord
 import random
+import re
 
 # core imports
 from DemonOverlord.core.util.responses import ImageResponse, BadCommandResponse
@@ -31,12 +32,17 @@ async def handler(command) -> discord.Embed:
     else:
         # filter mentions from params. double mentions are ignored
         # this is the case where we don't mention everyone
+        regex = re.compile(r"<@.?\d+>")
         if (
             command.params != None
             and len(command.mentions) > 0
             and command.params[0] != "everyone"
         ):
-            command.params = command.params[len(command.mentions) :]
+            if not command.reference:
+                command.params = command.params[len(command.mentions) :]
+            else:
+                command.params = list(filter(lambda x : not regex.match(x), command.params))
+
             mentions = [i.display_name for i in command.mentions]
 
         # this is the previous case, but we DO mention everyone
@@ -45,17 +51,25 @@ async def handler(command) -> discord.Embed:
             and len(command.mentions) > 0
             and command.params[0] == "everyone"
         ):
-            command.params = command.params[len(command.mentions) + 1 :]
+            if not command.reference:
+                command.params = command.params[len(command.mentions) :]
+            else:
+                command.params = list(filter(lambda x : not regex.match(x), command.params)[1:])
+
             mentions = ["everyone"] + [i.display_name for i in command.mentions]
 
         # we only mention everyone
         elif command.params != None and command.params[0] == "everyone":
             command.params = command.params[1:]  # filter everyone
             mentions = ["everyone"]
-
+        
         # we mention nobody (used for combine interactions)
         else:
-            mentions = []
+            if not command.reference:
+                mentions = []
+            else:
+                mentions = [i.display_name for i in command.mentions]
+
 
         # what other type of interaction is this?, just check and try to match
         if command.action in social_interactions:
@@ -66,22 +80,24 @@ async def handler(command) -> discord.Embed:
             url = await command.bot.api.tenor.get_interact(
                 f'anime {social_interactions[command.action]["query"]}'
             )
-            self_mention = False
-            interact = social_interactions[command.action]
-            user = command.invoked_by
 
-            if command.invoked_by.display_name in mentions and len(interact["self"]) > 0:
+            interaction = social_interactions[command.action]
+            user = command.invoked_by
+            interaction_prev = None
+
+            if command.invoked_by.display_name in mentions and len(interaction["self"]) > 0:
                 print(mentions)
                 url = await command.bot.api.tenor.get_interact(
                     f'anime {social_interactions["hug"]["query"]}'
                 )
+                interaction_prev = interaction
                 mentions = [command.invoked_by.display_name]
-                self_mention = True
-                interact = social_interactions["hug"]
+
+                interaction = social_interactions["hug"]
                 user = command.bot.user
 
             interact = SocialInteraction(
-                command.bot, interact, user , mentions, url, self_mention=self_mention
+                command.bot, interaction, user , mentions, url, interaction_prev=interaction_prev
             )
 
         # these are combine interactions, interactions that are capable of alone AND social interaction behavior
@@ -98,6 +114,7 @@ async def handler(command) -> discord.Embed:
                     url,
                 )
             elif combine_interactions[command.action]["type"] == "game":
+                
                 interact = GameInteraction(
                     command.bot,
                     combine_interactions[command.action],
@@ -105,6 +122,7 @@ async def handler(command) -> discord.Embed:
                     mentions,
                     url,
                 )
+                await interact.add_steamdata(command.bot)
             else:
                 interact = CombineInteraction(
                     command.bot,
@@ -168,11 +186,10 @@ class SocialInteraction(Interaction):
         user: discord.Member,
         mentions: list,
         url: str,
-        self_mention=False,
+        interaction_prev=None,
     ):
         # initialize the super class
         super().__init__(bot, interaction_type, user, url, color=0xA251AF)
-
         # parse the interaction
         if len(mentions) > 1:
             self.interact_with = f'{", ".join(mentions[:-1])} and {mentions[-1]}'
@@ -181,9 +198,11 @@ class SocialInteraction(Interaction):
 
         self.title = f'{bot.config.izzymojis[interaction_type["emoji"]]} {user.display_name} {interaction_type["action"]} {self.interact_with}'
 
-        if self_mention:
+        if not interaction_prev == None:
+            self.description = random.choice(interaction_prev["self"])
+
             
-            self.description = random.choice(interaction_type["self"])
+            
 
 
 class CombineInteraction(Interaction):
@@ -202,7 +221,7 @@ class CombineInteraction(Interaction):
         color: int = 0xA251AF,
     ):
         # initialize the super class
-        super().__init__(bot, interaction_type, user, url, color=color)
+        super().__init__(bot, interaction_type, user, url, color=color, )
 
         # parse the mentions, so we can set them properly or act as base interaction
         if len(mentions) > 1:
@@ -244,8 +263,8 @@ class MusicInteraction(CombineInteraction):
             self.description = f"{user.display_name} seems to be listening to music. Click on the title to open it in Spotify."
             self.insert_field_at(
                 0,
-                name=self.spotify.artist,
-                value=f"__**Song:**__ {self.spotify.title}\n__**Album:**__ {self.spotify.album}",
+                name=self.spotify.title,
+                value=f"__**Artist:**__ {self.spotify.artist}\n__**Album:**__ {self.spotify.album}",
                 inline=False,
             )
             self.url = f"https://open.spotify.com/track/{self.spotify.track_id}"
@@ -279,15 +298,15 @@ class GameInteraction(CombineInteraction):
             )
         )
         self.game = game[0] if len(game) > 0 else None
-
         # The user is playing a game
         if self.game != None:
-
+            
             # the user is just playing a game
             if (
                 isinstance(self.game, discord.Game)
                 or self.game.type == discord.ActivityType.playing
             ):
+                
                 self.insert_field_at(
                     0, name="Game:", value=self.game.name, inline=False
                 )
@@ -300,3 +319,16 @@ class GameInteraction(CombineInteraction):
                     value=f"**__Game:__** {self.game.game}",
                 )
                 self.url = self.game.url
+
+    async def add_steamdata(self, bot):
+        if not self.game ==None:
+            if isinstance(self.game, discord.Game) or self.game.type == discord.ActivityType.playing:
+                steamdata = await bot.api.steam.get_gamedata(bot, self.game.name)
+                if not steamdata== None:
+                    self.url = steamdata["store_url"]
+                    self.set_thumbnail(url=steamdata["image_url"])
+                    self.description = f"{self.user.display_name} seems to be playing a game, click on the title to go to its steam store page."
+                    if self.game.name =="Vecter":
+                        self.set_footer(text="Taranasus", icon_url="https://cdn.discordapp.com/avatars/293132462907850753/f28fe56a65f803416b7c892c78d48ad6.webp")
+                        self.set_author(name="Vecter Discord", url="https://discord.gg/9Bg9yCbf9E", icon_url="https://cdn.discordapp.com/icons/569921525575319562/a_99ae10aba7159a481c572c7d767f724f.webp")
+                            

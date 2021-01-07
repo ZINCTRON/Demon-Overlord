@@ -2,13 +2,15 @@
     "schemata": [
         "voting",
         "admin",
-        "relations"
+        "relations",
+        "public"
     ],
     "tables": [{
             "table_name": "admin_core",
             "table_schema": "admin",
             "table_space": "pg_default",
             "primary_key": "guild_id",
+            "all_required": false,
             "entry_required": true,
             "comment": "The core table holding admin data of all servers",
             "columns": [{
@@ -39,6 +41,7 @@
             "table_schema": "admin",
             "table_space": "pg_default",
             "primary_key": "guild_id",
+            "all_required": false,
             "entry_required": false,
             "comment": "The table that holds all custom ratelimits",
             "columns": [{
@@ -76,6 +79,7 @@
             "table_schema": "admin",
             "comment": "The core table to hold stuff regarding welcome messages",
             "primary_key": "guild_id",
+            "all_required": false,
             "entry_required": false,
             "table_space": "pg_default",
             "columns": [{
@@ -87,33 +91,49 @@
                     "auto_increment": false
                 },
                 {
+                    "column_name" : "wait_pending",
+                    "data_type" : "boolean",
+                    "column_default" : false,
+                    "is_nullable" : false,
+                    "character_maximum_length" : null,
+                    "auto_increment" : false
+                },
+                {
+                    "column_name" : "welcome_channel",
+                    "data_type" : "bigint",
+                    "column_default" : null,
+                    "is_nullable" : false,
+                    "character_maximum_length" : null,
+                    "auto_increment" : false
+                },
+                {
                     "column_name": "embed_description",
                     "data_type": "character varying",
-                    "column_default": null,
-                    "is_nullable": true,
+                    "column_default": "this is the description",
+                    "is_nullable": false,
                     "character_maximum_length": 2000,
                     "auto_increment": false
                 },
                 {
                     "column_name": "embed_title",
                     "data_type": "character varying",
-                    "column_default": "empty title",
+                    "column_default": "this the title",
                     "is_nullable": false,
                     "character_maximum_length": 256,
                     "auto_increment": false
                 },
                 {
-                    "column_name": "embed_colour",
+                    "column_name": "embed_color",
                     "data_type": "integer",
                     "column_default": 3553599,
-                    "is_nullable": false,
+                    "is_nullable": true,
                     "character_maximum_length": null,
                     "auto_increment": false
                 },
                 {
                     "column_name": "embed_image",
                     "data_type": "character varying",
-                    "column_default": null,
+                    "column_default": "https://i.ytimg.com/vi/ekthcIHDt3I/maxresdefault.jpg",
                     "is_nullable": true,
                     "character_maximum_length": 256,
                     "auto_increment": false
@@ -121,23 +141,15 @@
                 {
                     "column_name": "embed_thumbnail",
                     "data_type": "character varying",
-                    "column_default": null,
+                    "column_default": "{user.icon}",
                     "is_nullable": true,
                     "character_maximum_length": 256,
                     "auto_increment": false
                 },
                 {
-                    "column_name": "embed_author_name",
+                    "column_name": "embed_author",
                     "data_type": "character varying",
-                    "column_default": null,
-                    "is_nullable": true,
-                    "character_maximum_length": 256,
-                    "auto_increment": false
-                },
-                {
-                    "column_name": "embed_author_url",
-                    "data_type": "character varying",
-                    "column_default": null,
+                    "column_default": "{@Demon Overlord.name}",
                     "is_nullable": true,
                     "character_maximum_length": 256,
                     "auto_increment": false
@@ -145,23 +157,7 @@
                 {
                     "column_name": "embed_author_img",
                     "data_type": "character varying",
-                    "column_default": null,
-                    "is_nullable": true,
-                    "character_maximum_length": 256,
-                    "auto_increment": false
-                },
-                {
-                    "column_name": "embed_footer_text",
-                    "data_type": "character varying",
-                    "column_default": null,
-                    "is_nullable": true,
-                    "character_maximum_length": 256,
-                    "auto_increment": false
-                },
-                {
-                    "column_name": "embed_footer_img",
-                    "data_type": "character varying",
-                    "column_default": null,
+                    "column_default": "{@Demon Overlord.icon}",
                     "is_nullable": true,
                     "character_maximum_length": 256,
                     "auto_increment": false
@@ -173,6 +169,7 @@
             "table_schema": "voting",
             "table_space": "pg_default",
             "primary_key": "vote_id",
+            "all_required": false,
             "entry_required": false,
             "comment": "The core table for voting related actions. the main data of the vote is saved here",
             "columns": [{
@@ -212,6 +209,7 @@
             "table_schema": "voting",
             "table_space": "pg_default",
             "primary_key": "vote_id",
+            "all_required": false,
             "entry_required": false,
             "comment": null,
             "columns": [{
@@ -252,7 +250,132 @@
                     "auto_increment": false
                 }
             ]
+        },
+        {
+            "table_name": "steam_data",
+            "table_schema": "public",
+            "table_space": "pg_default",
+            "primary_key": "appid",
+            "entry_required": false,
+            "comment": "The table that holds all steam data and will be abused as cache",
+            "columns": [
+                {
+                    "column_name" : "appid",
+                    "data_type" : "bigint",
+                    "column_default" : null,
+                    "is_nullable" : false,
+                    "character_maximum_length" : null,
+                    "auto_increment" : false
+                },{
+                    "column_name" : "game_name",
+                    "data_type" : "character varying",
+                    "column_default" : null,
+                    "is_nullable" : false,
+                    "character_maximum_length" : 256,
+                    "auto_increment" : false
+                }, {
+                    "column_name" : "store_url",
+                    "data_type" : "character varying",
+                    "column_default" : "",
+                    "is_nullable" : false,
+                    "character_maximum_length" : 256,
+                    "auto_increment" : false
+                },{
+                    "column_name" : "image_url",
+                    "data_type" : "character varying",
+                    "column_default" : "",
+                    "is_nullable" : false,
+                    "character_maximum_length" : null,
+                    "auto_increment" : false
+                }
+            ]
+        },
+        {
+            "table_name": "api_refresh",
+            "table_schema": "public",
+            "table_space": "pg_default",
+            "primary_key": "api_name",
+            "entry_required": false,
+            "comment": "a table that holds timestamps of the last api access for certain apis.",
+            "columns": [
+                {
+                    "column_name" : "api_name",
+                    "data_type" : "character varying",
+                    "column_default" : null,
+                    "is_nullable" : false,
+                    "character_maximum_length" : 30,
+                    "auto_increment" : false
+                }, {
+                    "column_name" : "last_access",
+                    "data_type" : "bigint",
+                    "column_default" : null,
+                    "is_nullable" : false,
+                    "character_maximum_length" : null,
+                    "auto_increment" : false
+                }
+            ]
+        },
+        {
+            "table_name": "guilds",
+            "table_schema": "public",
+            "table_space": "pg_default",
+            "primary_key": "guild_id",
+            "all_required": true,
+            "entry_required": true,
+            "comment": null,
+            "columns": [
+                {
+                    "column_name" : "guild_id",
+                    "data_type" : "bigint",
+                    "column_default" : null,
+                    "is_nullable" : false,
+                    "character_maximum_length" : null,
+                    "auto_increment" : false
+                },{
+                    "column_name" : "joined_at",
+                    "data_type" : "bigint",
+                    "column_default" : null,
+                    "is_nullable" : true,
+                    "character_maximum_length" : null,
+                    "auto_increment" : false
+                },{
+                    "column_name" : "last_seen",
+                    "data_type" : "bigint",
+                    "column_default" : null,
+                    "is_nullable" : true,
+                    "character_maximum_length" : null,
+                    "auto_increment" : false
+                }
+            ]
+        },{
+            "table_name": "autoroles",
+            "table_schema": "admin",
+            "table_space": "pg_default",
+            "primary_key": "role_id",
+            "entry_required": false,
+            "comment": "A table that holds all roles that can be automatically assigned on join",
+            "columns": [{
+                "column_name" : "guild_id",
+                "data_type" : "bigint",
+                "column_default" : null,
+                "is_nullable" : false,
+                "character_maximum_length" : null,
+                "auto_increment" : false
+            }, {
+                "column_name" : "wait_pending",
+                "data_type" : "boolean",
+                "column_default" : false,
+                "is_nullable" : false,
+                "character_maximum_length" : null,
+                "auto_increment" : false
+            }, {
+                "column_name" : "role_id",
+                "data_type" : "bigint",
+                "column_default" : null,
+                "is_nullable" : false,
+                "character_maximum_length" : null,
+                "auto_increment" : false
+            }]
         }
-
     ]
 }

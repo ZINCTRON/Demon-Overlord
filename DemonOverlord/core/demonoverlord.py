@@ -2,16 +2,23 @@ import discord
 import os
 import random
 import asyncio
+import re
+
+from discord import guild
+from discord import embeds
 
 
 # core imports
+from DemonOverlord.core.util import services
 from DemonOverlord.core.util.config import (
     CommandConfig,
     BotConfig,
     DatabaseConfig,
     APIConfig,
 )
+
 from DemonOverlord.core.util.command import Command
+from DemonOverlord.core.util.responses import WelcomeResponse
 from DemonOverlord.core.util.logger import (
     LogCommand,
     LogMessage,
@@ -79,29 +86,12 @@ class DemonOverlord(discord.Client):
         # initializing discord client
         super().__init__(intents=intents, activity=presence)
 
-    @staticmethod
-    async def change_status(client: discord.Client) -> None:
-        """
-        Change the status to a random one one specified in the config
-        this is a coroutine and it's supposed to run in the background 
-        """
-        await client.wait_until_ready()
-        while True:
-            # there's a 5% chance of the status changing at all
-            if random.random() < 0.05:
-                # choose a random one from the list and set it
-                presence = random.choice(client.config.status_messages)
-                await client.change_presence(activity=presence)
-
-                # log the action
-                presence_type = str(presence.type).split(".")[1]
-                print(
-                    LogMessage(
-                        f"Set Status \"{LogFormat.format(f'{presence_type} {presence.name}', LogFormat.BOLD)}\""
-                    )
-                )
-            # sleep for 1h and hand over control
-            await asyncio.sleep(3600)
+        # initialize our own services
+        try:
+            self.loop.create_task(services.change_status(self))
+            self.loop.create_task(services.fetch_steamdata(self))
+        except Exception:
+            print(LogMessage("Setup for services failed"))
 
     async def wait_until_done(self) -> None:
         await self.wait_until_ready()
@@ -112,8 +102,66 @@ class DemonOverlord(discord.Client):
         await self.database.add_guild(guild.id)
 
     async def on_guild_remove(self, guild) -> None:
-        print(LogMessage(f"Removed guild {guild.name}, removing all data from database"))
+        print(
+            LogMessage(f"Removed guild {guild.name}, removing all data from database")
+        )
         await self.database.remove_guild(guild.id)
+
+    async def on_member_join(self, member: discord.Member):
+        if self.local or member.pending:
+            return
+        autoroles = await self.database.get_autorole(member.guild.id)
+        if autoroles != None:
+            role = member.guild.get_role(autoroles["role_id"])
+            roles = [role] if role else []
+
+            if len(roles) > 0:
+                try:
+                    await member.add_roles(
+                        *roles, reason="Automatic Role Assignment", atomic=True
+                    )
+                    print(LogMessage("Autorole assigned successfully"))
+                except discord.errors.Forbidden:
+                    print(
+                        LogMessage(
+                            f"Issue on Server '{member.guild}', permissions missing."
+                        )
+                    )
+
+        welcome = await self.database.get_welcome(member.guild.id)
+        if welcome != None:
+            response = WelcomeResponse(welcome, self, member)
+            await response.channel.send(embed=response)
+
+    async def on_member_update(self, before: discord.Member, after: discord.Member):
+        await self.wait_until_done()
+
+        if not after.pending and before.pending != after.pending:
+
+            autoroles = await self.database.get_autorole(
+                after.guild.id, wait_pending=True
+            )
+            if autoroles != None:
+                role = after.guild.get_role(autoroles["role_id"])
+                roles = [role] if role else []
+
+                if len(roles) > 0:
+                    try:
+                        await after.add_roles(
+                            *roles, reason="Automatic Role Assignment", atomic=True
+                        )
+                        print(LogMessage("Autorole assigned successfully"))
+                    except discord.errors.Forbidden:
+                        print(
+                            LogMessage(
+                                f"Issue on Server '{after.guild}', permissions missing."
+                            )
+                        )
+
+            welcome = await self.database.get_welcome(after.guild.id, wait_pending=True)
+            if welcome != None and welcome["wait_pending"]:
+                welcome = WelcomeResponse(welcome, self, after)
+                await welcome.channel.send(embed=welcome)
 
     async def on_ready(self) -> None:
         print(LogHeader("CONNECTED SUCCESSFULLY"))
@@ -171,14 +219,8 @@ class DemonOverlord(discord.Client):
                 else:
                     print(LogMessage("All Tables are in place and seem to be correct."))
 
-                # test data in tables, since certain entries NEED to exist
-                print(LogMessage("Checking Table Data"))
-                if not await self.database.data_test(self.guilds):
-                    print(LogMessage("Some default data desn't exist, trying to correct...", msg_type=LogType.WARNING))
-                    await self.database.data_fix()
-                else:
-                    print(LogMessage("All Servers are in place and seem to be correctly set up."))
-
+                # print(LogMessage("Updating Guild status...."))
+                # self.database.update_guilds(self.guilds)
 
             except Exception as e:
                 # catch all errors and log them
@@ -190,6 +232,8 @@ class DemonOverlord(discord.Client):
                 )
                 print(LogMessage(e, msg_type=LogType.ERROR))
                 self.local = True
+        for guild in self.guilds:
+            print(f"Joined guild {guild.name} at {guild.me.joined_at}")
 
         # finish up and send the ready event
         print(LogHeader("startup done"))
@@ -198,17 +242,24 @@ class DemonOverlord(discord.Client):
     async def on_message(self, message: discord.Message) -> None:
 
         # handle all commands
-        if message.author != self.user and message.content.startswith(
+        if not message.author.bot and message.content.startswith(
             self.config.mode["prefix"]
         ):
 
-            # signal typing status
-            async with message.channel.typing():
+            try:
+                # signal typing status
+                async with message.channel.typing():
 
-                # wait until bot has finished loading
-                await self.wait_until_done()
+                    # wait until bot has finished loading
+                    await self.wait_until_done()
 
-                # build the command and execute it
-                command = Command(self, message)
-                print(LogCommand(command))
-                await command.exec()
+                    # build the command and execute it
+                    command = Command(self, message)
+                    print(LogCommand(command))
+                    await command.exec()
+            except discord.errors.Forbidden:
+                print(
+                    LogMessage(
+                        "No permission to send to channel", msg_type=LogType.ERROR
+                    )
+                )

@@ -5,8 +5,10 @@ WORKDIR /bot
 COPY requirements.txt .
 
 RUN apt-get update
-RUN apt-get install libpq-dev python3-dev gcc -yq
+RUN apt-get install build-essential libpq-dev python3-dev git -yq
 RUN pip install -r requirements.txt
+RUN git clone https://github.com/Rapptz/discord.py.git
+RUN cd discord.py; pip install .
 
 EXPOSE 443 50000-65535
 

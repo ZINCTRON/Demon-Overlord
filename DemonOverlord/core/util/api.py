@@ -1,6 +1,7 @@
 # imports
-import requests as req
-import json
+from DemonOverlord.core.util.logger import LogMessage, LogType
+import aiohttp
+import random
 from random import randint
 
 
@@ -15,6 +16,7 @@ class API:
         self.url = url
 
 
+
 class TenorAPI(API):
     """
     This is the Tenor API class, used to interact with Tenor, the GIF service.
@@ -23,25 +25,25 @@ class TenorAPI(API):
     def __init__(self, apikey: str):
 
         # initialize super class
-        super().__init__(apikey, "tenor", "https://api.tenor.com/v1")
+        super().__init__(apikey, "tenor", "https://api.tenor.com/v1/search")
 
     async def get_interact(self, name: str) -> str:
-        res = await self.__request_list(name, 20)
-        res_list = list(res["results"])
-
-        index = randint(0, len(res_list) - 1)
-        result = res_list[index]["media"][0]["gif"]["url"]
-        return result
-
-    async def __request_list(self: object, query: str, limit: int) -> dict:
         try:
-            url = f'{self.url}/search?q={query.replace(" ", "+")}&key={self.apikey}&limit={limit}'
-            response = req.get(url)
-            response.raise_for_status()
+            url = f'{self.url}?q={name.replace(" ", "+")}&key={self.apikey}&limit=20'
+            async with aiohttp.ClientSession() as session:
+                async with await session.get(url) as response:
+                    assert response.status == 200
+                    data = await response.json()
+                    res_list = list(data["results"])
+
         except Exception:
             return False
         else:
-            return json.loads(response.text)
+            result = random.choice(res_list)["media"][0]["gif"]["url"]
+            return result
+
+        
+
 
 
 class InspirobotAPI(API):
@@ -52,35 +54,51 @@ class InspirobotAPI(API):
     def __init__(self):
         super().__init__("", "inspirobot", "https://inspirobot.me")
 
-    # get the list of stuff from inspirobot
-    async def __get_flow(self) -> str:
+    # public function that gets data from inspiro and then gets the shortest quote
+    async def get_quote(self) -> str:
 
         # let's try getting something
         try:
             # you know... i don't like that you treat me like an object...
-            url = f"{self.url}/api?generate=true"
-            response = req.get(url)
-
-            # YOU RAISE ME UUUUUUUP
-            response.raise_for_status()
-        except Exception:
-
+            res = None
+            async with aiohttp.ClientSession() as session:
+                async with await session.get(f"{self.url}/api?generate=true") as response:
+                    assert response.status == 200
+                    res = await response.text()
+                
+            return res
+        except Exception as e:
             # I've had enough of this... this is just WRONG
-            return False
-        else:
+            return None
 
-            # all is good, return the object
-            return response.text
 
-    # public function that gets data from inspiro and then gets the shortest quote
-    async def get_quote(self) -> str:
+class SteamAPI(API):
+    def __init__(self):
+        super().__init__("", "Steam", "https://api.steampowered.com/ISteamApps/GetAppList/v2/")
+    
+    async def get_appdata(self) -> dict:
+        try:
+            print(LogMessage(f"Trying to get steam appdata from '{self.url}'") )
+            async with aiohttp.ClientSession() as session:
+                async with await session.get(self.url) as response:
+                    assert response.status == 200
+                    return await response.json()
+        except AssertionError:
+            print(LogMessage(f"Getting steam appdata failed.")) 
 
-        # get a flow and init quotes array
-        img = await self.__get_flow()
+    async def get_gamedata(self, bot, game:str) -> dict:
+        try:
 
-        # FUCK, NO. WHY DOESN'T THIS WORK???? ~ Luzi
-        if not img:
-            return False
+            for i in ["Options", "Steam"]:
+                game = game.upper().replace(i.upper(), "")
 
-        # return the image
-        return img
+            with bot.database.connection_main.cursor() as cursor:
+                cursor.execute("SELECT store_url, image_url FROM public.steam_data WHERE UPPER(game_name) = %s ORDER BY appid ASC", [f"{game.strip()}"])
+                results = cursor.fetchall()
+                if len(results) == 0:
+                    return None
+                else:
+                    return results[0]
+        except Exception as e:
+            print(LogMessage("something went wrong when requesting Game data", msg_type=LogType.ERROR))
+            print(LogMessage(e, msg_type=LogType.ERROR))
