@@ -16,4 +16,4 @@ ADD ./DemonOverlord /bot/DemonOverlord
 COPY ./run.py /bot/run.py
 
 # run the thing
-CMD ["python3.8", "-u", "run.py", "--prod"]
+CMD ["python3.9", "-u", "run.py", "--prod"]
