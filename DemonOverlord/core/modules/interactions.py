@@ -30,6 +30,32 @@ async def handler(command) -> discord.Embed:
             title=f'{command.invoked_by.display_name} {alone_interactions[command.action]["action"]}.',
         )
     else:
+        # nested function to get mentions of command and make sure if embed title does not get too long
+        def get_mentions(everyone: str="") -> list:
+            # initialize list and counter
+            mentions = [] if len(everyone) == 0 else [everyone]
+            mentionsLen = len(command.invoked_by.display_name) + len(everyone) + 3
+            if command.action in combine_interactions:
+                mentionsLen += (
+                    len(combine_interactions[command.action]["action"]["social"]) +
+                    len(str(command.bot.config.izzymojis[combine_interactions[command.action]["emoji"]]))
+                )
+            else:
+                mentionsLen += (
+                    len(social_interactions[command.action]["action"]) +
+                    len(str(command.bot.config.izzymojis[social_interactions[command.action]["emoji"]]))
+                )
+
+            # get mentions and stop iteration when embed title gets too long
+            for i in command.mentions:
+                mentionsLen += len(i.display_name) + 2
+                if mentionsLen > 255 - 2:
+                    break
+                mentions.append(i.display_name)
+
+            return mentions
+
+            
         # filter mentions from params. double mentions are ignored
         # this is the case where we don't mention everyone
         regex = re.compile(r"<@.?\d+>")
@@ -43,7 +69,7 @@ async def handler(command) -> discord.Embed:
             else:
                 command.params = list(filter(lambda x : not regex.match(x), command.params))
 
-            mentions = [i.display_name for i in command.mentions]
+            mentions = get_mentions()
 
         # this is the previous case, but we DO mention everyone
         elif (
@@ -56,7 +82,7 @@ async def handler(command) -> discord.Embed:
             else:
                 command.params = list(filter(lambda x : not regex.match(x), command.params)[1:])
 
-            mentions = ["everyone"] + [i.display_name for i in command.mentions]
+            mentions = get_mentions("everyone")
 
         # we only mention everyone
         elif command.params != None and command.params[0] == "everyone":
@@ -68,7 +94,7 @@ async def handler(command) -> discord.Embed:
             if not command.reference:
                 mentions = []
             else:
-                mentions = [i.display_name for i in command.mentions]
+                mentions = get_mentions()
 
 
         # what other type of interaction is this?, just check and try to match
@@ -137,7 +163,7 @@ async def handler(command) -> discord.Embed:
 
     # add the user's message to the interaction.
     if command.params != None and len(command.params) > 0:
-        interact.add_message(" ".join(command.params))
+        interact.add_message(" ".join(command.params)[:1023])
 
     return interact
 

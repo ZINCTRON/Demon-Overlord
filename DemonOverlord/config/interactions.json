@@ -70,13 +70,6 @@
             "emoji": "izzyangry",
             "gifs": []
         },
-        "eat": {
-            "query": "eat",
-            "type": "alone",
-            "action": "eats",
-            "emoji": "knife",
-            "gifs": []
-        },
         "smug": {
             "query": "smug",
             "type": "alone",
