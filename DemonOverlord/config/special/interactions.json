@@ -628,17 +628,12 @@
             "emoji": "izzyhug",
             "self": [],
             "gifs": [
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                ""
+                "https://media1.tenor.com/images/a5dbae268b6ed66ac9bf469babd02490/tenor.gif",
+                "https://media1.tenor.com/images/788241d27a6568664c527b720e89f654/tenor.gif",
+                "https://media1.tenor.com/images/49eca25b340de151f388bbc65df62c3a/tenor.gif",
+                "https://media1.tenor.com/images/58e903eee47f8c656081f28faace86a1/tenor.gif",
+                "https://media1.tenor.com/images/47ad09db47d7770b5f944890bb09a089/tenor.gif",
+                "https://media1.tenor.com/images/85be26f7fba18a5e83a694e5513ec44b/tenor.gif"
             ]
         },
         "kiss": {
@@ -763,7 +758,8 @@
             "action": "shoots",
             "emoji": "izzyeyes",
             "self": [
-                "Stop, please get some help."
+                "Stop, please get some help.",
+                "Awww let me hug you, i hope you are doing fine"
             ],
             "gifs": [
                 "https://media1.tenor.com/images/bc9de60ee5286066ef62dcdbde028e0d/tenor.gif",
@@ -830,30 +826,9 @@
             "type": "social",
             "action": "stabs",
             "emoji": "knife",
-            "self": [],
-            "gifs": [
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                ""
-            ]
-        },
-        "eat": {
-            "query": "eat",
-            "type": "combine",
-            "emoji": "siip",
-            "action": {
-                "alone": "eats.",
-                "social": "eats with"
-            },
-            "self": [],
+            "self": [
+                "put that sharp object away"
+            ],
             "gifs": [
                 "",
                 "",
