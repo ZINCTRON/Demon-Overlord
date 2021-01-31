@@ -14,10 +14,18 @@ async def handler(command) -> discord.Embed:
     combine_interactions = command.bot.commands.interactions["combine"]
 
     # what interaction do we have?
-    if command.action in alone_interactions:
-        # get the url from tenor
-        url = await command.bot.api.tenor.get_interact(
-            f'anime {alone_interactions[command.action]["query"]}'
+    if command.action in alone_interactions.keys():
+
+        gifs = list(alone_interactions[command.action]["gifs"])
+        index = random.randint(0, len(gifs)-1 if len(gifs)>0 else 0)
+        print(gifs[0], index)
+        url = (
+            gifs[index]
+            if len(gifs) > 0
+            else await command.bot.api.tenor.get_interact(
+                f'anime {alone_interactions[command.action]["query"]}'
+            )
+
         )
 
         # actually create the interaction
@@ -57,6 +65,7 @@ async def handler(command) -> discord.Embed:
 
             
         # filter mentions from params. double mentions are ignored
+
         # this is the case where we don't mention everyone
         regex = re.compile(r"<@.?\d+>")
         if (
@@ -71,7 +80,7 @@ async def handler(command) -> discord.Embed:
 
             mentions = get_mentions()
 
-        # this is the previous case, but we DO mention everyone
+            
         elif (
             command.params != None
             and len(command.mentions) > 0
@@ -103,8 +112,13 @@ async def handler(command) -> discord.Embed:
             if len(mentions) < 1:
                 return BadCommandResponse(command)
 
-            url = await command.bot.api.tenor.get_interact(
-                f'anime {social_interactions[command.action]["query"]}'
+            gifs = list(social_interactions[command.action]["gifs"])
+            url = (
+                random.choice(gifs)
+                if len(gifs) > 0
+                else await command.bot.api.tenor.get_interact(
+                    f'anime {social_interactions[command.action]["query"]}'
+                )
             )
 
             interaction = social_interactions[command.action]
@@ -112,25 +126,35 @@ async def handler(command) -> discord.Embed:
             interaction_prev = None
 
             if command.invoked_by.display_name in mentions and len(interaction["self"]) > 0:
-                print(mentions)
-                url = await command.bot.api.tenor.get_interact(
-                    f'anime {social_interactions["hug"]["query"]}'
-                )
-                interaction_prev = interaction
-                mentions = [command.invoked_by.display_name]
+                if interaction["violent"]:
+                    print(mentions)
+                    url = await command.bot.api.tenor.get_interact(
+                        f'anime {social_interactions["hug"]["query"]}'
+                    )
+                    interaction_prev = interaction
+                    mentions = [command.invoked_by.display_name]
 
-                interaction = social_interactions["hug"]
-                user = command.bot.user
+                    interaction = social_interactions["hug"]
+                    user = command.bot.user
+                else:
+                    interaction_prev = interaction
 
             interact = SocialInteraction(
                 command.bot, interaction, user , mentions, url, interaction_prev=interaction_prev
             )
 
         # these are combine interactions, interactions that are capable of alone AND social interaction behavior
-        elif command.action in combine_interactions:
-            url = await command.bot.api.tenor.get_interact(
-                f'anime {combine_interactions[command.action]["query"]}'
+        elif command.action in combine_interactions.keys():
+            gifs = list(combine_interactions[command.action]["gifs"])
+            index = random.randint(0, len(gifs)-1 if len(gifs)>0 else 0)
+            url = (
+                gifs[index]
+                if len(gifs) > 0
+                else await command.bot.api.tenor.get_interact(
+                    f'anime {combine_interactions[command.action]["query"]}'
+                )
             )
+
             if combine_interactions[command.action]["type"] == "music":
                 interact = MusicInteraction(
                     command.bot,
@@ -347,14 +371,13 @@ class GameInteraction(CombineInteraction):
                 self.url = self.game.url
 
     async def add_steamdata(self, bot):
-        if not self.game ==None:
-            if isinstance(self.game, discord.Game) or self.game.type == discord.ActivityType.playing:
-                steamdata = await bot.api.steam.get_gamedata(bot, self.game.name)
-                if not steamdata== None:
-                    self.url = steamdata["store_url"]
-                    self.set_thumbnail(url=steamdata["image_url"])
-                    self.description = f"{self.user.display_name} seems to be playing a game, click on the title to go to its steam store page."
-                    if self.game.name =="Vecter":
-                        self.set_footer(text="Taranasus", icon_url="https://cdn.discordapp.com/avatars/293132462907850753/f28fe56a65f803416b7c892c78d48ad6.webp")
-                        self.set_author(name="Vecter Discord", url="https://discord.gg/9Bg9yCbf9E", icon_url="https://cdn.discordapp.com/icons/569921525575319562/a_99ae10aba7159a481c572c7d767f724f.webp")
+        if not self.game ==None and (isinstance(self.game, discord.Game) or self.game.type == discord.ActivityType.playing):
+            steamdata = await bot.api.steam.get_gamedata(bot, self.game.name)
+            if not steamdata== None:
+                self.url = steamdata["store_url"]
+                self.set_thumbnail(url=steamdata["image_url"])
+                self.description = f"{self.user.display_name} seems to be playing a game, click on the title to go to its steam store page."
+                if self.game.name =="Vecter":
+                    self.set_footer(text="Taranasus", icon_url="https://cdn.discordapp.com/avatars/293132462907850753/f28fe56a65f803416b7c892c78d48ad6.webp")
+                    self.set_author(name="Vecter Discord", url="https://discord.gg/9Bg9yCbf9E", icon_url="https://cdn.discordapp.com/icons/569921525575319562/a_99ae10aba7159a481c572c7d767f724f.webp")
                             
