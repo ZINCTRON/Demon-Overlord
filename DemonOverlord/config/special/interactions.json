@@ -181,29 +181,6 @@
                 "https://media1.tenor.com/images/68c5ef2709e274e4cdb62f38d7bad781/tenor.gif"
             ]
         },
-        "eat": {
-            "query": "eat",
-            "type": "alone",
-            "action": "eats",
-            "emoji": "knife",
-            "gifs": [
-                "https://media1.tenor.com/images/e99b1e190f07e896d0db050084070a2a/tenor.gif",
-                "https://media1.tenor.com/images/53bf47e8d83ca0590816f62318e354d7/tenor.gif",
-                "https://media1.tenor.com/images/6ea67fa988a462fa0fc7206d1467e10c/tenor.gif",
-                "https://media1.tenor.com/images/bbde5d236bc942799c9c477bf9fd2cf3/tenor.gif",
-                "https://media1.tenor.com/images/80aed7285f5723aaba4a7680884b7644/tenor.gif",
-                "https://media1.tenor.com/images/bec0ebd1f7d9e265a432ddf3f76e2363/tenor.gif",
-                "https://media1.tenor.com/images/ba3f35a89c220760facb86b35adc35b8/tenor.gif",
-                "https://media1.tenor.com/images/193d1b9d83656fdc328138238e11d0cd/tenor.gif",
-                "https://media1.tenor.com/images/4164627ef1e4c30aa68853f470587bdb/tenor.gif",
-                "https://media1.tenor.com/images/56654eb38f6ed08f81ebd395e98197ac/tenor.gif",
-                "https://media1.tenor.com/images/98b21965b83feb66b6f25b8be45d6214/tenor.gif",
-                "https://media1.tenor.com/images/76d6b2e0cc3b7c9afc980d5471871b51/tenor.gif",
-                "https://media1.tenor.com/images/5d6baa94cd7a02d0751779c851c598b9/tenor.gif",
-                "https://media1.tenor.com/images/960151a0c15fefd51e008e45e59486f9/tenor.gif",
-                "https://media1.tenor.com/images/aa94097e87f4386322b9609da96676d6/tenor.gif"
-            ]
-        },
         "smug": {
             "query": "smug",
             "type": "alone",
@@ -555,6 +532,12 @@
                 "https://media1.tenor.com/images/aa94097e87f4386322b9609da96676d6/tenor.gif",
                 "https://media1.tenor.com/images/56654eb38f6ed08f81ebd395e98197ac/tenor.gif",
                 "https://media1.tenor.com/images/57132837f3a2e51a854450d7401414e7/tenor.gif",
+                "https://media1.tenor.com/images/e99b1e190f07e896d0db050084070a2a/tenor.gif",
+                "https://media1.tenor.com/images/53bf47e8d83ca0590816f62318e354d7/tenor.gif",
+                "https://media1.tenor.com/images/bbde5d236bc942799c9c477bf9fd2cf3/tenor.gif",
+                "https://media1.tenor.com/images/bec0ebd1f7d9e265a432ddf3f76e2363/tenor.gif",
+                "https://media1.tenor.com/images/76d6b2e0cc3b7c9afc980d5471871b51/tenor.gif",
+                "https://media1.tenor.com/images/960151a0c15fefd51e008e45e59486f9/tenor.gif",
                 "https://media1.tenor.com/images/117af41eb556b61ee4388eb1fc46e7c1/tenor.gif"
             ]
         },
