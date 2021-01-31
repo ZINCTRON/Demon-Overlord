@@ -1,8 +1,8 @@
 {
     "query": "",
-    "type": "",
     "action": "",
     "emoji": "",
+    "violent": false,
     "self": [],
     "gifs": []
 }

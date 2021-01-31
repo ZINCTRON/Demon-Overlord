@@ -13,16 +13,16 @@
     },
     "env_vars": {
         "postgres": {
-            "user":"POSTGRES_USER",
-            "pass":"POSTGRES_PASSWORD",
-            "host":"POSTGRES_SERVER",
-            "port":"POSTGRES_PORT",
-            "db":"POSTGRES_DB"
+            "user": "POSTGRES_USER",
+            "pass": "POSTGRES_PASSWORD",
+            "host": "POSTGRES_SERVER",
+            "port": "POSTGRES_PORT",
+            "db": "POSTGRES_DB"
         },
         "tenor": {
-            "token":"TENOR_TOKEN"
-        }, 
-        "discord" : {
+            "token": "TENOR_TOKEN"
+        },
+        "discord": {
             "production_token": "DISCORD_MAIN_TOKEN",
             "development_token": "DISCORD_TESTBOT_TOKEN"
         }
@@ -52,7 +52,8 @@
         "izzyeyes": 796364435031326741,
         "smugizzy": 796364468572782612,
         "izzyhug": 796364438726770698,
-        "trashlove": 796364481986428938
+        "trashlove": 796364481986428938,
+        "thinking": 796432180683079720
     },
     "emoji": {
         "yes_no": [
