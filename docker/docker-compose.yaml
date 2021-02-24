@@ -5,6 +5,7 @@ services:
         ports:
             - "443:443"
         restart: always
+        user: "${CONTAINER_USER}"
         env_file:
             - ~/bot/bot.env
         depends_on:
