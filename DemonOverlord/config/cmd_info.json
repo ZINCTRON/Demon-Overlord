@@ -82,10 +82,6 @@
                 "description": "useful bot commands to manage certain things and get info about stuff."
             },
             {
-                "command": "admin",
-                "description": "All the commands related to administration. Only Developers and Moderators can use this"
-            },
-            {
                 "command": "fun",
                 "description": "commands that have no purpose but fun itself."
             }
