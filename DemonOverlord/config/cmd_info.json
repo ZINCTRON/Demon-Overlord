@@ -116,105 +116,7 @@
                 },
                 "actions": null
             },
-            {
-                "command": "minecraft",
-                "short": null,
-                "syntax": "minecraft {action} {params}",
-                "description": "a command to get info about the MC server",
-                "ratelimit": {
-                    "limit": 20,
-                    "user_dependent": true
-                },
-                "actions": [{
-                    "action": "info",
-                    "description": "Gives general information about the Minecraft server",
-                    "usage": "info",
-                    "params": []
-                }, {
-                    "action": "rules",
-                    "description": "Shows the rules of the server",
-                    "usage": "rules",
-                    "params": []
-                }, {
-                    "action": "mods",
-                    "description": "Shows the mods that are definitely allowed.",
-                    "usage": "mods",
-                    "params": []
-                }, {
-                    "action": "datapacks",
-                    "description": "Shows the datapacks installed on the server",
-                    "usage": "datapacks",
-                    "params": []
-                }]
-            },
-            {
-                "command": "vote",
-                "short": null,
-                "syntax": "vote {action} {params}",
-                "description": "creates or removes a vote.",
-                "ratelimit": {
-                    "limit": 300,
-                    "user_dependent": true
-                },
-                "actions": [{
-                        "action": "create",
-                        "description": "creates a vote with given parameters.",
-                        "usage": "create {name};{options}",
-                        "params": [{
-                                "name": "name",
-                                "description": "The Name of the vote."
-                            },
-                            {
-                                "name": "options",
-                                "description": "a comma separated list of vote options."
-                            }
-                        ]
-                    },
-                    {
-                        "action": "end",
-                        "description": "ends the vote ",
-                        "usage": "vote end {name}",
-                        "params": [{
-                            "name": "name",
-                            "description": "The Name of the vote."
-                        }]
-                    }
-                ]
-            }
         ]
-    },
-    "admin": {
-        "command_syntax": "{command} {action} {params}",
-        "description": "All the commands for bot and server administration",
-        "timeout": 15,
-        "commands": [{
-            "command": "limit",
-            "short": null,
-            "syntax": "limit {action} {params}",
-            "description": "a command to add or remove a limit from a command or all commands",
-            "ratelimit": {
-                "limit": 0,
-                "user_dependent": true
-            },
-            "actions": [{
-                "action": "set",
-                "description": "sets the rate limit of a specified command",
-                "usage": "set {command} {time} <{local}>",
-                "params": [{
-                        "name": "command",
-                        "description": "The Name of the command to limit or 'all'"
-                    },
-                    {
-                        "name": "interval",
-                        "description": "A time interval in seconds."
-                    },
-                    {
-                        "name": "local",
-                        "description": "can be `yes/no`. makes limit user depedent"
-                    }
-                ]
-            }]
-        }]
     },
     "fun": {
         "command_syntax": "{command} {action} {params}",
@@ -225,17 +127,6 @@
                 "short": null,
                 "syntax": "quote",
                 "description": "Gets a random, possibly Inspirational, Image Quote from Inspirobot.",
-                "ratelimit": {
-                    "limit": 300,
-                    "user_dependent": true
-                },
-                "actions": null
-            },
-            {
-                "command": "bubble",
-                "short": null,
-                "syntax": "bubble",
-                "description": "creates a 10x10 grid of 'pop' spoilers where one may be replaced with nut or uwu",
                 "ratelimit": {
                     "limit": 300,
                     "user_dependent": true
