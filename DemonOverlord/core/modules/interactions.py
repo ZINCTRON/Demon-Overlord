@@ -18,7 +18,6 @@ async def handler(command) -> discord.Embed:
 
         gifs = list(alone_interactions[command.action]["gifs"])
         index = random.randint(0, len(gifs)-1 if len(gifs)>0 else 0)
-        print(gifs[0], index)
         url = (
             gifs[index]
             if len(gifs) > 0
