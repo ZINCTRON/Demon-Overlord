@@ -88,7 +88,7 @@ async def handler(command) -> discord.Embed:
             if not command.reference:
                 command.params = command.params[len(command.mentions) :]
             else:
-                command.params = list(filter(lambda x : not regex.match(x), command.params)[1:])
+                command.params = list(filter(lambda x : not regex.match(x), command.params))[1:]
 
             mentions = get_mentions("everyone")
 

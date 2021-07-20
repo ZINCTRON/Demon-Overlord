@@ -27,6 +27,7 @@ class BotConfig(object):
         self.env = None
         self.emoji = None
         self.status_messages = list()
+        self.channel_ids = None
 
         # get the raw config.json
         with open(os.path.join(confdir, "config.json")) as f:
@@ -71,6 +72,7 @@ class BotConfig(object):
         self.env = self.raw["env_vars"]
         self.token = os.environ[self.env["discord"][f"{self.mode['name']}_token"]]
         self.emoji = self.raw["emoji"]
+        self.channel_ids = self.raw["channel_ids"]
 
     def post_connect(self, bot: discord.Client):
         """this function loads any configuration that needs the bot to be online (like emoji)"""

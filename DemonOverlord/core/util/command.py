@@ -34,6 +34,7 @@ class Command(object):
         self.short = False
         self.params = None
         self.reference = None
+        self.log_it = False
 
         # create the command
         to_filter = ["", " ", None]
@@ -112,7 +113,22 @@ class Command(object):
         except Exception:
             response = ErrorResponse(self, traceback.format_exc())
             self.reference = None
+            self.log_it = True
  
+        # send message permanently in log channel if it should be logged
+        if self.log_it:
+            # temporary exception handling in case the bot wants to send message in different server
+            try:
+                log_channel = self.bot.config.channel_ids["log"]
+                await self.message.guild.get_channel(log_channel).send(embed=response, reference=self.reference)
+            except AttributeError:
+                print(
+                    LogMessage(
+                        "Tried to send embed in not existing channel in server", 
+                        msg_type=LogType.WARNING
+                    )
+                )
+
         # Send the message
         message = await self.channel.send(embed=response, reference=self.reference)
 
