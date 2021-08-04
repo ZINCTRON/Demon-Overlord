@@ -10,6 +10,9 @@ RUN apt-get install build-essential libpq-dev python3-dev git -yq
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
+RUN git clone https://github.com/Rapptz/discord.py.git
+RUN pip install -U ./discord.py
+
 # set up container
 EXPOSE 443 50000-65535
 ADD ./DemonOverlord /bot/DemonOverlord
