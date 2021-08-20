@@ -62,7 +62,7 @@ class WelcomeResponse(TextResponse):
                         elif group["ctrl_arg"] == "id":
                             var = user.id
                         elif group["ctrl_arg"] == "icon":
-                            var = user.avatar_url
+                            var = user.default_avatar_url
                         elif group["ctrl_arg"] == "mention":
                             var = user.mention
                         else:
@@ -109,7 +109,7 @@ class WelcomeResponse(TextResponse):
                             elif group["ctrl_arg"] == "id":
                                 var = member.id
                             elif group["ctrl_arg"] == "icon":
-                                var = member.avatar_url
+                                var = member.default_avatar_url
                             elif group["ctrl_arg"] == "mention":
                                 var = member.mention
                             else:
