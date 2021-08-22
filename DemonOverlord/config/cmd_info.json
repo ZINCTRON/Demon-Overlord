@@ -132,7 +132,7 @@
             {
                 "command": "dice",
                 "short": null,
-                "syntax": "dice {die_type}",
+                "syntax": "dice {dice_type}",
                 "description": "Rolls one a dice.",
                 "ratelimit": {
                     "limit": 20,
@@ -174,7 +174,7 @@
                 "command": "minesweeper",
                 "short": "ms",
                 "syntax": "minesweeper {action}",
-                "description": "start a game of minesweeper",
+                "description": "Play a game of minesweeper\nTo start a game, use 'minesweeper start'\nFurther instruction are given during game",
                 "ratelimit": {
                     "limit": 3000,
                     "user_dependent": true

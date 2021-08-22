@@ -44,8 +44,9 @@ async def handler(command) -> None:
         game_won = False
         game_grid = generate_game()
         running = True
+        game_timeout = 180
         reason = "You hit a mine and lost. Better luck next time"
-        description = f'This is minesweeper.\nYou can do the following things:\n__Toggle Flag:__\n  `{command.bot.config.mode["prefix"]} ms flag {{x}} {{y}}`\n\n__Reveal a field:__\n  `{command.bot.config.mode["prefix"]} ms reveal {{x}} {{y}}`\n\n__End Game:__\n `{command.bot.config.mode["prefix"]} ms quit`'
+        description = f'This is minesweeper.\nThe game ends automatically after doing nothing for {game_timeout//60}:{game_timeout%60:02} minutes.\nYou can do the following things:\n__Toggle Flag:__\n  `{command.bot.config.mode["prefix"]} ms flag {{x}} {{y}}`\n\n__Reveal a field:__\n  `{command.bot.config.mode["prefix"]} ms reveal {{x}} {{y}}`\n\n__End Game:__\n `{command.bot.config.mode["prefix"]} ms quit`'
         response = await command.message.channel.send(
             embed=GameResponse(
                 "Minesweeeper", description, get_grid(command.bot, game_grid)
@@ -56,7 +57,7 @@ async def handler(command) -> None:
         while running and not game_won:
             try:
                 message = await command.bot.wait_for(
-                    "message", check=msg_test, timeout=60
+                    "message", check=msg_test, timeout=game_timeout
                 )
                 # we can assume here, that the message has the correct information, based on msg_test
                 make_command = message.content.split(" ")
@@ -256,7 +257,7 @@ class ValueField:
         if self.flagged:
             return "F"
         elif self.uncovered:
-            return str(self.value) if self.value else "B"
+            return str(self.value) if self.value != None else "B"
 
         else:
             return "X"
