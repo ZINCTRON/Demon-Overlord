@@ -2,6 +2,7 @@ from DemonOverlord.core.util.logger import LogCommand
 import discord
 import pkgutil
 import traceback
+import re
 from importlib import import_module
 
 # core imports
@@ -17,11 +18,18 @@ from DemonOverlord.core.util.logger import ( LogType, LogMessage)
 
 
 
+def escape_markdown(display_name: str) -> str:
+    """
+    Scan string display_name for markdown entries and escape them
+    """
+    return re.sub(r"[*_~|`\\]", lambda match : "\\" + match.group(), display_name)
+
 class Command(object):
     def __init__(self, bot: discord.Client, message: discord.message):
 
         # initialize all properties
         self.invoked_by = message.author
+        self.invoked_by_name = escape_markdown(self.invoked_by.display_name)
         self.mentions = message.mentions
         self.channels = message.channel_mentions
         self.guild = message.guild

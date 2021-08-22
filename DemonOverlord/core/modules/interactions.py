@@ -5,6 +5,7 @@ import re
 # core imports
 from DemonOverlord.core.util.responses import ImageResponse, BadCommandResponse
 from DemonOverlord.core.util.logger import LogCommand, LogMessage, LogHeader
+from DemonOverlord.core.util.command import escape_markdown
 
 
 async def handler(command) -> discord.Embed:
@@ -34,14 +35,14 @@ async def handler(command) -> discord.Embed:
             command.invoked_by,
             url,
             color=0xE2268F,
-            title=f'{command.invoked_by.display_name} {alone_interactions[command.action]["action"]}.',
+            title=f'{command.invoked_by_name} {alone_interactions[command.action]["action"]}.',
         )
     else:
         # nested function to get mentions of command and make sure if embed title does not get too long
         def get_mentions(everyone: str="") -> list:
             # initialize list and counter
             mentions = [] if len(everyone) == 0 else [everyone]
-            mentionsLen = len(command.invoked_by.display_name) + len(everyone) + 3
+            mentionsLen = len(command.invoked_by_name) + len(everyone) + 3
             if command.action in combine_interactions:
                 mentionsLen += (
                     len(combine_interactions[command.action]["action"]["social"]) +
@@ -54,11 +55,11 @@ async def handler(command) -> discord.Embed:
                 )
 
             # get mentions and stop iteration when embed title gets too long
-            for i in command.mentions:
-                mentionsLen += len(i.display_name) + 2
+            for mention in command.mentions:
+                mentionsLen += len(escape_markdown(mention.display_name)) + 2
                 if mentionsLen > 255 - 2:
                     break
-                mentions.append(i.display_name)
+                mentions.append(escape_markdown(mention.display_name))
 
             return mentions
 
@@ -124,14 +125,14 @@ async def handler(command) -> discord.Embed:
             user = command.invoked_by
             interaction_prev = None
 
-            if command.invoked_by.display_name in mentions and len(interaction["self"]) > 0:
+            if command.invoked_by_name in mentions and len(interaction["self"]) > 0:
                 if interaction["violent"]:
                     print(mentions)
                     url = await command.bot.api.tenor.get_interact(
                         f'anime {social_interactions["hug"]["query"]}'
                     )
                     interaction_prev = interaction
-                    mentions = [command.invoked_by.display_name]
+                    mentions = [command.invoked_by_name]
 
                     interaction = social_interactions["hug"]
                     user = command.bot.user
@@ -217,6 +218,7 @@ class Interaction(ImageResponse):
         )
         self.interaction_type = type
         self.user = user
+        self.user_name = escape_markdown(user.display_name)
 
     def add_message(self, msg: str) -> None:
         self.add_field(name="Message:", value=msg)
@@ -245,7 +247,7 @@ class SocialInteraction(Interaction):
         else:
             self.interact_with = f"{mentions[0]}"
 
-        self.title = f'{bot.config.izzymojis[interaction_type["emoji"]]} {user.display_name} {interaction_type["action"]} {self.interact_with}'
+        self.title = f'{bot.config.izzymojis[interaction_type["emoji"]]} {self.user_name} {interaction_type["action"]} {self.interact_with}'
 
         if not interaction_prev == None:
             self.description = random.choice(interaction_prev["self"])
@@ -275,13 +277,13 @@ class CombineInteraction(Interaction):
         # parse the mentions, so we can set them properly or act as base interaction
         if len(mentions) > 1:
             self.interact_with = f'{", ".join(mentions[:-1])} and {mentions[-1]}'
-            self.title = f'{user.display_name} {interaction_type["action"]["social"]} {self.interact_with}'
+            self.title = f'{self.user_name} {interaction_type["action"]["social"]} {self.interact_with}'
 
         elif len(mentions) == 1:
             self.interact_with = f"{mentions[0]}"
-            self.title = f'{user.display_name} {interaction_type["action"]["social"]} {self.interact_with}'
+            self.title = f'{self.user_name} {interaction_type["action"]["social"]} {self.interact_with}'
         else:
-            self.title = f'{bot.config.izzymojis[interaction_type["emoji"]]} {user.display_name} {interaction_type["action"]["alone"]}'
+            self.title = f'{bot.config.izzymojis[interaction_type["emoji"]]} {self.user_name} {interaction_type["action"]["alone"]}'
 
 
 # music interaction, a special case that has both Alone and Social aspects
@@ -309,7 +311,7 @@ class MusicInteraction(CombineInteraction):
 
         # if the user is listening to something (and discord sees it) then set a text field to reflect that. also ad a url, so the user can open it in spotify.
         if self.spotify:
-            self.description = f"{user.display_name} seems to be listening to music. Click on the title to open it in Spotify."
+            self.description = f"{self.user_name} seems to be listening to music. Click on the title to open it in Spotify."
             self.insert_field_at(
                 0,
                 name=self.spotify.title,
@@ -375,7 +377,7 @@ class GameInteraction(CombineInteraction):
             if not steamdata== None:
                 self.url = steamdata["store_url"]
                 self.set_thumbnail(url=steamdata["image_url"])
-                self.description = f"{self.user.display_name} seems to be playing a game, click on the title to go to its steam store page."
+                self.description = f"{self.user_name} seems to be playing a game, click on the title to go to its steam store page."
                 if self.game.name =="Vecter":
                     self.set_footer(text="Taranasus", icon_url="https://cdn.discordapp.com/avatars/293132462907850753/f28fe56a65f803416b7c892c78d48ad6.webp")
                     self.set_author(name="Vecter Discord", url="https://discord.gg/9Bg9yCbf9E", icon_url="https://cdn.discordapp.com/icons/569921525575319562/a_99ae10aba7159a481c572c7d767f724f.webp")
