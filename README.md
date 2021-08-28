@@ -1,6 +1,12 @@
 # Demon Overlord
 
 A discord bot custom built for the use of The InnerDemons discord community
+## The future of this bot
+As some of you know discord.py, the library i use, [has come to an end](https://gist.github.com/Rapptz/4a2f62751b9600a31a0d3c78100287f1). Personally i completely understand it and i will not continue to develop this bot any further. 
+
+I entirely disagree with this stupid direction that discord is going in and will not rewrite this bot in another language.
+In other words: **This bot will die once the library is fully deprecated by discord's actions**
+I will continue hosting the bot as long as it will run and i will do the occasional bugfix, but nothing more. Honestly my motivation for this and patience with discord is at an end. It is open source for a reason, so go ahead and feel free to make your own fork. 
 
 ## Installation
 
