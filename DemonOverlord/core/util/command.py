@@ -43,6 +43,7 @@ class Command(object):
         self.params = None
         self.reference = None
         self.log_it = False
+        self.command = None
 
         # create the command
         to_filter = ["", " ", None]
@@ -58,7 +59,6 @@ class Command(object):
         else:
             # empty command
             self.err = True
-            self.command = None
             return
 
         if self.command in bot.commands.short:
@@ -100,7 +100,7 @@ class Command(object):
         # try catch for generic error
 
         try:
-            if (self.command in dir(cmds)) and (not self.short):
+            if (self.command in dir(cmds)) and (not self.short or self.command != None):
                 # see if limiter is active, if not, execute the command
                 # limiter removed temporarily. 
                 if not False:
