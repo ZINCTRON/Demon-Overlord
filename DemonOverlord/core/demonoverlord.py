@@ -248,15 +248,18 @@ class DemonOverlord(discord.Client):
 
             try:
                 # signal typing status
-                async with message.channel.typing():
+                try:
+                    await message.channel.trigger_typing()
+                except Exception:
+                    pass
+                
+                # wait until bot has finished loading
+                await self.wait_until_done()
 
-                    # wait until bot has finished loading
-                    await self.wait_until_done()
-
-                    # build the command and execute it
-                    command = Command(self, message)
-                    print(LogCommand(command))
-                    await command.exec()
+                # build the command and execute it
+                command = Command(self, message)
+                print(LogCommand(command))
+                await command.exec()
             except discord.errors.Forbidden:
                 print(
                     LogMessage(
