@@ -12,7 +12,7 @@ except (ImportError):
     missing_module = True
     print(
         LogMessage(
-            f"not all dependencies seem to be installed, please run {LogFormat.format('pip install -Ur requirements.txt', LogFormat.BOLD)}",
+            f"not all delpendencies seem to be installed, pease run {LogFormat.format('pip install -Ur requirements.txt', LogFormat.BOLD)}",
             prefix=f"{LogFormat.format('ERROR', LogFormat.FAIL)}",
             time=False,
         )
