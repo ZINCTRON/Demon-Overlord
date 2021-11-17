@@ -89,7 +89,8 @@ class DemonOverlord(discord.Client):
         # initialize our own services
         try:
             self.loop.create_task(services.change_status(self))
-            self.loop.create_task(services.fetch_steamdata(self))
+            if not ("--no-steam" in sys.argv):
+                self.loop.create_task(services.fetch_steamdata(self))
         except Exception:
             print(LogMessage("Setup for services failed"))
 

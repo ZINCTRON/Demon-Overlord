@@ -64,6 +64,8 @@ Please only use `testmao` for testing any features.
 
 `python run.py --dev`
 
+if you don't want the steam service to process the data, which can take quite long, you can use the `--no-steam` flag
+
 ### FOR DEPLOYMENT
 
 If you're trying to do this and you're reading this, you're doing something very wrong. Don't do it. This is a mode reserved exclusively for running it on the server and it uses a different token.
