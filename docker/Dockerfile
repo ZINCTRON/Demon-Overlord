@@ -14,7 +14,6 @@ RUN git clone https://github.com/Rapptz/discord.py.git
 RUN pip install -U ./discord.py
 
 # set up container
-EXPOSE 443 50000-65535
 ADD ./DemonOverlord /bot/DemonOverlord
 COPY ./run.py /bot/run.py
 
