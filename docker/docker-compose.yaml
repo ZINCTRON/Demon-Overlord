@@ -3,7 +3,7 @@ services:
     bot:
         image: demonoverlord:latest # the image will be on the same device but pushed and built on and from other machines
         ports:
-            - "443:443"
+            - "443:8443"
         restart: always
         user: "${CONTAINER_USER}"
         env_file:
