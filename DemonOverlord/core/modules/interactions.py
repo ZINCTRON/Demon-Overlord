@@ -221,6 +221,7 @@ class Interaction(ImageResponse):
         self.user_name = escape_markdown(user.display_name)
 
     def add_message(self, msg: str) -> None:
+        msg = msg.replace("@everyone", "everyone")
         self.add_field(name="Message:", value=msg)
 
 
