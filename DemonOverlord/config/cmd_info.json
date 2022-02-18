@@ -132,13 +132,19 @@
             {
                 "command": "dice",
                 "short": null,
-                "syntax": "dice {dice_type}",
+                "syntax": "dice {die_type}",
                 "description": "Rolls one a dice.",
                 "ratelimit": {
                     "limit": 20,
                     "user_dependent": true
                 },
                 "actions": [{
+                        "action": "d4",
+                        "description": "rolls a dice with 4 sides",
+                        "usage": "d4",
+                        "params": null
+                    },
+                    {
                         "action": "d6",
                         "description": "rolls a dice with 6 sides",
                         "usage": "d6",
