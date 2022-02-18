@@ -132,7 +132,7 @@
             {
                 "command": "dice",
                 "short": null,
-                "syntax": "dice {die_type}",
+                "syntax": "dice {dice_type}",
                 "description": "Rolls one a dice.",
                 "ratelimit": {
                     "limit": 20,
